@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { auth } from "@/stores"
 	import { supabase } from "@/supabase"
 	import { goBackOnEscape } from "@/utils/key"
@@ -24,7 +25,7 @@
 			}
 		})
 		if (error) {
-			toast.error("Failed to sign in with OAuth", { description: error.message })
+			toast.error(m.auth_failed_sign_in_oauth(), { description: error.message })
 		} else {
 			if (data.url) open(data.url)
 		}
@@ -32,7 +33,7 @@
 
 	onMount(() => {
 		if ($auth.session) {
-			toast.success("Already Signed In")
+			toast.success(m.auth_already_signed_in())
 			goHome()
 		}
 	})
@@ -47,7 +48,7 @@
 	<Card.Root class="w-80">
 		<Card.Header class="flex flex-col items-center">
 			<img src="/favicon.png" alt="Kunkun" class="h-12 w-12 invert" />
-			<Card.Title class="text-xl">Sign In</Card.Title>
+			<Card.Title class="text-xl">{m.auth_sign_in()}</Card.Title>
 		</Card.Header>
 		<Card.Content class="flex flex-col gap-2">
 			<Button variant="outline" size="lg" class="w-full" onclick={() => signInWithOAuth("github")}>

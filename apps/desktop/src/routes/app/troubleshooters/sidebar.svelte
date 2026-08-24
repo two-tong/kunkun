@@ -28,7 +28,7 @@
 			icon: Network
 		},
 		{
-			title: "ORM",
+			title: m.troubleshooters_sidebar_orm_title(),
 			url: i18n.resolveRoute("/app/troubleshooters/orm"),
 			icon: DB
 		}

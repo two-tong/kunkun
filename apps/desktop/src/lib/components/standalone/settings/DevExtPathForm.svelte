@@ -18,7 +18,7 @@
 			devExtPath = dir
 			appConfig.setDevExtensionPath(dir)
 		} else {
-			return toast.error("Invalid Path")
+			return toast.error(m.dev_extension_path_invalid())
 		}
 	}
 

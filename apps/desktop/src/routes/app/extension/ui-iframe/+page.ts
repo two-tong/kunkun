@@ -1,5 +1,6 @@
 import { KunkunIframeExtParams } from "@/cmds/ext"
 import { i18n } from "@/i18n"
+import * as m from "@/paraglide/messages"
 import type { Ext as ExtInfoInDB, ExtPackageJsonExtra } from "@kksh/api/models"
 import { db } from "@kksh/drizzle"
 import { loadExtensionManifestFromDisk } from "@kksh/extension"
@@ -25,16 +26,16 @@ export const load: PageLoad = async ({
 	// both query parameter must exist
 	const rawKunkunIframeExtParams = localStorage.getItem("kunkun-iframe-ext-params")
 	if (!rawKunkunIframeExtParams) {
-		toast.error("Invalid extension path or url")
-		return svError(404, "Invalid extension path or url")
+		toast.error(m.extension_invalid_path_url())
+		return svError(404, m.extension_invalid_path_url())
 	}
 	// localStorage.removeItem("kunkun-iframe-ext-params")
 	const parsed = v.safeParse(KunkunIframeExtParams, JSON.parse(rawKunkunIframeExtParams))
 	if (!parsed.success) {
-		toast.error("Fail to parse extension params from local storage", {
+		toast.error(m.extension_parse_params_failed(), {
 			description: `${v.flatten<typeof KunkunIframeExtParams>(parsed.issues)}`
 		})
-		return svError(400, "Fail to parse extension params from local storage")
+		return svError(400, m.extension_parse_params_failed())
 	}
 	const { url: extUrl, extPath } = parsed.output
 	console.log("extUrl extPath", extUrl, extPath)
@@ -57,7 +58,7 @@ export const load: PageLoad = async ({
 		_loadedExt = await loadExtensionManifestFromDisk(await join(extPath, "package.json"))
 	} catch (err) {
 		error(`Error loading extension manifest: ${err}`)
-		toast.error("Error loading extension manifest", {
+		toast.error(m.extension_manifest_load_error(), {
 			description: `${err}`
 		})
 		goto(i18n.resolveRoute("/app/"))
@@ -65,8 +66,8 @@ export const load: PageLoad = async ({
 	const loadedExt = _loadedExt!
 	const extInfoInDB = await db.getUniqueExtensionByPath(loadedExt.extPath)
 	if (!extInfoInDB) {
-		toast.error("Unexpected Error", {
-			description: `Extension ${loadedExt.kunkun.identifier} not found in database. Run Troubleshooter.`
+		toast.error(m.extension_unexpected_error(), {
+			description: m.extension_not_in_db({ identifier: loadedExt.kunkun.identifier })
 		})
 		goto(i18n.resolveRoute("/app/"))
 	}

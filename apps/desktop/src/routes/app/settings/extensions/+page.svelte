@@ -22,10 +22,10 @@
 
 		return uninstallFunc(ext.kunkun.identifier)
 			.then((uninstalledExt) => {
-				toast.success(`${uninstalledExt.name} Uninstalled`)
+				toast.success(m.settings_extensions_uninstalled({ name: uninstalledExt.name }))
 			})
 			.catch((err) => {
-				toast.error("Fail to uninstall extension", { description: err })
+				toast.error(m.settings_extensions_fail_uninstall(), { description: err })
 				error(`Fail to uninstall store extension (${ext.kunkun.identifier}): ${err}`)
 			})
 			.finally(() => {
@@ -38,7 +38,11 @@
 	<Table.Row>
 		<Table.Cell class="font-medium">{ext.kunkun.name}</Table.Cell>
 		<Table.Cell class="">{ext.kunkun.identifier}</Table.Cell>
-		<Table.Cell>{type}</Table.Cell>
+		<Table.Cell>
+			{type === "Dev Extension"
+				? m.settings_extensions_type_dev()
+				: m.settings_extensions_type_installed()}
+		</Table.Cell>
 		<Table.Cell>{ext.version}</Table.Cell>
 		<Table.Cell>
 			<Button

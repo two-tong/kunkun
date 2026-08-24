@@ -1,3 +1,4 @@
+import * as m from "@/paraglide/messages"
 import { app } from "@tauri-apps/api"
 import { getAllWindows, getCurrentWindow, type Window } from "@tauri-apps/api/window"
 import { isRegistered, register, unregister } from "@tauri-apps/plugin-global-shortcut"
@@ -35,8 +36,8 @@ export async function registerAppHotkey(hotkeyStr: string) {
 			const mainWin = wins.find((w) => w.label === "main")
 			if (!mainWin) {
 				return sendNotificationWithPermission(
-					"No main window found",
-					"Please open main window first"
+					m.hotkey_no_main_window(),
+					m.hotkey_open_main_window()
 				)
 			}
 			const isVisible = await mainWin.isVisible()

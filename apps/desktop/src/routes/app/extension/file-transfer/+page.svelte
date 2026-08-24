@@ -1,5 +1,6 @@
 <script lang="ts">
 	import DragNDrop from "@/components/common/DragNDrop.svelte"
+	import * as m from "@/paraglide/messages"
 	import { cn } from "@/utils"
 	import { goBackOnEscape } from "@/utils/key"
 	import { goBack } from "@/utils/route"
@@ -57,7 +58,11 @@
 		unlistenReq = await listen<FileTransferPayload>("file-transfer-request", async (e) => {
 			console.log(e)
 			const confirmed = await confirm(
-				`Download files (${e.payload.totalFiles} files, ${prettyBytes(e.payload.totalBytes)}) from ${e.payload.ip}?`
+				m.file_transfer_download_confirm({
+					count: e.payload.totalFiles,
+					size: prettyBytes(e.payload.totalBytes),
+					ip: e.payload.ip
+				})
 			)
 			if (!confirmed) return
 			downloadFiles(e.payload, await path.downloadDir(), (progress) => {
@@ -66,7 +71,7 @@
 			})
 				.catch((err) => {
 					console.error("Fail to download files", err)
-					toast.error("Fail to download files", { description: err.message })
+					toast.error(m.file_transfer_fail_download(), { description: err.message })
 				})
 				.finally(() => {
 					console.log("finally clean", e.payload.code)
@@ -128,14 +133,15 @@
 							icon={{ value: "mdi:file", type: IconEnum.Iconify }}
 							class="h-10 w-10"
 						/>
-						<small class="select-none font-mono text-xs">Drag and Drop</small>
-						<small class="select-none font-mono text-xs">File To Send</small>
+						<small class="select-none font-mono text-xs">{m.file_transfer_drag_and_drop()}</small>
+						<small class="select-none font-mono text-xs">{m.file_transfer_file_to_send()}</small>
 					</div>
 				</button>
 				{#if files.length > 0}
 					<div>
-						<pre><strong>Total Files:</strong> {previewBucketInfo?.total_files ?? 0}</pre>
-						<pre><strong>Total Bytes:</strong> {prettyBytes(
+						<pre><strong>{m.file_transfer_total_files()}</strong> {previewBucketInfo?.total_files ??
+								0}</pre>
+						<pre><strong>{m.file_transfer_total_bytes()}</strong> {prettyBytes(
 								previewBucketInfo?.total_bytes ?? 0
 							)}</pre>
 					</div>
@@ -158,13 +164,13 @@
 	<div class="container">
 		<!-- <Button onclick={getAllBuckets}>Get All Buckets</Button> -->
 		<Table.Root>
-			<Table.Caption>Peers in local network</Table.Caption>
+			<Table.Caption>{m.file_transfer_peers_caption()}</Table.Caption>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head class="w-[100px]">Hostname</Table.Head>
-					<Table.Head>Addreess</Table.Head>
-					<Table.Head>Port</Table.Head>
-					<Table.Head class="text-right">Send</Table.Head>
+					<Table.Head class="w-[100px]">{m.file_transfer_hostname()}</Table.Head>
+					<Table.Head>{m.file_transfer_address()}</Table.Head>
+					<Table.Head>{m.file_transfer_port()}</Table.Head>
+					<Table.Head class="text-right">{m.file_transfer_send()}</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>

@@ -48,10 +48,12 @@
 		// 	.unregisterExtensionFromWindow(label)
 		unregisterExtensionWindow(label)
 			.then(() => {
-				toast.success("Unregistered window")
+				toast.success(m.troubleshooters_extension_window_unregistered())
 			})
 			.catch((err) => {
-				toast.error("Failed to unregister window", { description: err.message })
+				toast.error(m.troubleshooters_extension_window_fail_unregister(), {
+					description: err.message
+				})
 			})
 	}
 
@@ -86,7 +88,7 @@
 		{#each Object.entries(winLabelMap) as [label, content]}
 			<li>
 				<span class="flex gap-2">
-					<strong>Label:</strong>
+					<strong>{m.troubleshooters_extension_window_label()}</strong>
 					<pre class="text-lime">{label}</pre>
 				</span>
 				<ul class="pl-5">

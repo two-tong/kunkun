@@ -10,6 +10,7 @@
 		class: className,
 		defaultAction,
 		actionPanel,
+		actionPanelLabels,
 		actionPanelOpen = $bindable(false),
 		onActionPanelBlur,
 		onDefaultActionSelected,
@@ -20,6 +21,11 @@
 		actionPanelOpen?: boolean
 		onActionPanelBlur?: () => void
 		actionPanel?: ActionSchema.ActionPanel
+		actionPanelLabels?: {
+			actions: string
+			selectAction: string
+			noActionFound: string
+		}
 		onDefaultActionSelected?: () => void
 		onActionSelected?: (value: string) => void
 	} = $props()
@@ -46,6 +52,7 @@
 		{#if actionPanel}
 			<ActionPanel
 				{actionPanel}
+				labels={actionPanelLabels}
 				{onActionSelected}
 				bind:open={actionPanelOpen}
 				onBlur={onActionPanelBlur}

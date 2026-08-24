@@ -5,10 +5,11 @@
 	import { DraggableCommandGroup } from "../custom"
 	import { CmdValue, type CmdQuery, type QuickLink } from "./types"
 
-	const { quickLinks }: { quickLinks: QuickLink[] } = $props()
+	const { quickLinks, heading = "Quick Links" }: { quickLinks: QuickLink[]; heading?: string } =
+		$props()
 </script>
 
-<DraggableCommandGroup heading="Quick Links">
+<DraggableCommandGroup {heading}>
 	{#each quickLinks as cmd (`quick-link-${cmd.name}`)}
 		<Command.Item
 			class="flex justify-between"

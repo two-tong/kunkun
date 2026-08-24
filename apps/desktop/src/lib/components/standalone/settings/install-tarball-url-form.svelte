@@ -18,18 +18,16 @@
 		// data.url
 		// https://storage.huakun.tech/vscode-0.0.6.tgz
 		if (!$appConfig.devExtensionPath) {
-			toast.warning(
-				"Please set the dev extension path in the settings to install tarball extension"
-			)
+			toast.warning(m.dev_extension_set_path_hint())
 			return goto(i18n.resolveRoute("/app/settings/set-dev-ext-path"))
 		}
 		await extensions
 			.installFromTarballUrl(data.url, $appConfig.devExtensionPath)
 			.then(() => {
-				toast.success("Sucecss", { description: "Extension installed successfully" })
+				toast.success(m.common_success(), { description: m.dev_extension_installed() })
 			})
 			.catch((err) => {
-				toast.warning("Failed to install extension", { description: err })
+				toast.warning(m.dev_extension_install_failed(), { description: err })
 			})
 	}
 
@@ -54,7 +52,11 @@
 		<Form.Control>
 			{#snippet children({ props })}
 				<div class="flex items-center gap-2">
-					<Input {...props} bind:value={$formData.url} placeholder="Tarball URL" />
+					<Input
+						{...props}
+						bind:value={$formData.url}
+						placeholder={m.dev_extension_tarball_url()}
+					/>
 					<Form.Button class="my-1">{m.common_install()}</Form.Button>
 				</div>
 			{/snippet}

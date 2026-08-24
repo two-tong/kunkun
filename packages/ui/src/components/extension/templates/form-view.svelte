@@ -2,18 +2,21 @@
 	import { FormNodeNameEnum, FormSchema } from "@kksh/api/models"
 	import { Button, Progress } from "@kksh/svelte5"
 	import { ArrowLeftIcon } from "lucide-svelte"
+	import type { ComponentProps } from "svelte"
 	import Form from "./form.svelte"
 
 	let {
 		formViewContent,
 		pbar,
 		onGoBack,
-		onSubmit
+		onSubmit,
+		labels
 	}: {
 		formViewContent: FormSchema.Form
 		pbar: number | null
 		onGoBack: () => void
 		onSubmit?: (formData: Record<string, string | number | boolean>) => void
+		labels?: ComponentProps<typeof Form>["labels"]
 	} = $props()
 </script>
 
@@ -30,6 +33,6 @@
 		{#if formViewContent.description}
 			<p>{formViewContent.description}</p>
 		{/if}
-		<Form {formViewContent} {onSubmit} />
+		<Form {formViewContent} {onSubmit} {labels} />
 	</main>
 {/if}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DanceTransition from "@/components/dance/dance-transition.svelte"
 	import { i18n } from "@/i18n"
+	import * as m from "@/paraglide/messages"
 	import { appConfig, appState, winExtMap } from "@/stores"
 	import { helperAPI } from "@/utils/helper"
 	import { paste } from "@/utils/hotkey"
@@ -184,12 +185,12 @@
 				}
 			})
 		} else {
-			toast.warning("iframeRef.contentWindow not available")
+			toast.warning(m.extension_iframe_unavailable())
 		}
 
 		setTimeout(() => {
 			if (!uiControl.iframeLoaded) {
-				toast.error("Extension failed to load")
+				toast.error(m.extension_failed_load())
 			}
 		}, 3_000)
 	})

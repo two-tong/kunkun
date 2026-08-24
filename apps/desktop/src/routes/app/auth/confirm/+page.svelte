@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { i18n } from "@/i18n.js"
+	import * as m from "@/paraglide/messages"
 	import { auth } from "@/stores"
 	import { supabase } from "@/supabase"
 	import { goHomeOnEscape } from "@/utils/key"
@@ -16,13 +17,13 @@
 		if (data.code) {
 			auth.signInExchange(data.code).then((res) => {
 				if (res.error) {
-					toast.error("Failed to sign in", { description: res.error.message })
+					toast.error(m.auth_failed_sign_in(), { description: res.error.message })
 				} else {
-					toast.success("Signed In")
+					toast.success(m.auth_signed_in())
 				}
 			})
 		} else {
-			toast.error("No code found")
+			toast.error(m.auth_no_code_found())
 		}
 	}
 
@@ -46,7 +47,7 @@
 		auth
 			.signOut()
 			.then(() => goto(i18n.resolveRoute("/app/auth")))
-			.catch((err) => toast.error("Failed to sign out", { description: err.message }))
+			.catch((err) => toast.error(m.auth_failed_sign_out(), { description: err.message }))
 	}
 </script>
 
@@ -67,9 +68,9 @@
 	<div class="flex grow items-center justify-center pt-16">
 		<div class="flex flex-col items-center gap-4">
 			{#if $auth.session}
-				<span class="font-mono text-4xl font-bold">Welcome, You are Logged In</span>
+				<span class="font-mono text-4xl font-bold">{m.auth_welcome_logged_in()}</span>
 			{:else}
-				<span class="font-mono text-4xl font-bold">You Are Not Logged In</span>
+				<span class="font-mono text-4xl font-bold">{m.auth_not_logged_in()}</span>
 			{/if}
 			<span class="flex flex-col items-center gap-5 text-xl">
 				{#if $auth.session}
@@ -78,7 +79,7 @@
 						<Avatar.Fallback>{avatarFallback}</Avatar.Fallback>
 					</Avatar.Root>
 				{/if}
-				<Button variant="outline" onclick={onSignOut}>Sign Out</Button>
+				<Button variant="outline" onclick={onSignOut}>{m.auth_sign_out()}</Button>
 			</span>
 		</div>
 	</div>

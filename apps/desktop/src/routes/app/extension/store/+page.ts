@@ -1,3 +1,4 @@
+import * as m from "@/paraglide/messages"
 import { appConfig, appState, extensions, installedStoreExts } from "@/stores"
 import { goHome } from "@/utils/route"
 // import { supabaseAPI } from "@/supabase"
@@ -19,7 +20,9 @@ export const load: PageLoad = (): Promise<{
 		.then(({ data: storeExtList, error, response }) => {
 			storeExtList = storeExtList ?? []
 			if (error) {
-				toast.error(`Failed to load extension store: ${error} (${response.status})`)
+				toast.error(m.store_load_failed(), {
+					description: `${error} (${response.status})`
+				})
 				goHome()
 			}
 			const storeExtsMap = Object.fromEntries(storeExtList.map((ext) => [ext.identifier, ext]))

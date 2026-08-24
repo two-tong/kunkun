@@ -30,7 +30,12 @@
 		footer,
 		onHighlightedItemChanged,
 		loading,
-		listViewContent
+		listViewContent,
+		labels = {
+			noResults: "No results found.",
+			noData: "No Data",
+			loading: "Loading"
+		}
 	}: {
 		searchTerm: string
 		searchBarPlaceholder: string
@@ -46,6 +51,7 @@
 		footer: Snippet
 		loading: boolean
 		listViewContent: ListSchema.List
+		labels?: { noResults: string; noData: string; loading: string }
 	} = $props()
 	let leftPane: PaneAPI | undefined
 	let rightPane: PaneAPI | undefined
@@ -216,7 +222,7 @@
 	<Resizable.PaneGroup direction="horizontal">
 		<Resizable.Pane bind:this={leftPane}>
 			<Command.List class="h-full max-h-screen" onscroll={onScroll} bind:ref={virtualListEl}>
-				<Command.Empty>No results found.</Command.Empty>
+				<Command.Empty>{labels.noResults}</Command.Empty>
 				<div
 					style="position: relative; height: {itemsTotalSize + sectionTotalHeight}px; width: 100%;"
 					class=""
@@ -245,14 +251,14 @@
 							/>
 						{:else}
 							<Command.Item>
-								<span>No Data</span>
+								<span>{labels.noData}</span>
 							</Command.Item>
 						{/if}
 					{/each}
 				</div>
 				{#if loading}
 					<StrikeSeparator class="h-20">
-						<span>Loading</span>
+						<span>{labels.loading}</span>
 					</StrikeSeparator>
 				{/if}
 			</Command.List>

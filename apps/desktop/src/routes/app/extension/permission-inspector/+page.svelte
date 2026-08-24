@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { goBackOnEscape } from "@/utils/key"
 	import { goBack } from "@/utils/route"
 	import { listenToFileDrop } from "@/utils/tauri-events"
@@ -33,19 +34,21 @@
 	async function inspectPaths(paths: string[]) {
 		for (const path of paths) {
 			if (!(await exists(path))) {
-				toast.error("Selected path does not exist", { description: path })
+				toast.error(m.permission_inspector_path_not_exist(), { description: path })
 				continue
 			}
 			const manifestPath = await join(path, "package.json")
 			if (!(await exists(manifestPath))) {
-				toast.error("Selected path is not an extension", { description: path })
+				toast.error(m.permission_inspector_not_extension(), { description: path })
 				continue
 			}
 			try {
 				pkgJsons.push(await loadExtensionManifestFromDisk(manifestPath))
-				toast.success("Extension manifest loaded", { description: path })
+				toast.success(m.permission_inspector_manifest_loaded(), { description: path })
 			} catch (err) {
-				toast.error(`Failed to load extension manifest: ${err}`, { description: path })
+				toast.error(m.permission_inspector_manifest_load_failed(), {
+					description: `${path}: ${err}`
+				})
 			}
 		}
 	}
@@ -56,7 +59,7 @@
 			multiple: true
 		})
 		if (!paths) {
-			return toast.error("No folder selected")
+			return toast.error(m.common_no_folder_selected())
 		}
 		inspectPaths(paths)
 	}
@@ -68,8 +71,8 @@
 	<Button variant="outline" size="icon" class="absolute left-2 top-2 z-50" onclick={goBack}>
 		<ArrowLeftIcon class="h-4 w-4" />
 	</Button>
-	<h1 class="text-2xl font-bold">Extension Permission Inspector</h1>
-	<Button class="my-5" onclick={onPick}>Pick Extension Folder to Inspect</Button>
+	<h1 class="text-2xl font-bold">{m.permission_inspector_title()}</h1>
+	<Button class="my-5" onclick={onPick}>{m.permission_inspector_pick_folder()}</Button>
 	<div class="mb-5 flex flex-col gap-4">
 		{#each pkgJsons as pkgJson}
 			<Card.Root>
@@ -82,10 +85,12 @@
 				</Card.Content>
 				<Card.Footer class="block">
 					<p class="text-sm">
-						<strong>Identifier:</strong> <code>{pkgJson.kunkun.identifier}</code>
+						<strong>{m.permission_inspector_identifier()}</strong>
+						<code>{pkgJson.kunkun.identifier}</code>
 					</p>
 					<p class="text-sm">
-						<strong>Extension Path:</strong> <code>{pkgJson.extPath}</code>
+						<strong>{m.permission_inspector_extension_path()}</strong>
+						<code>{pkgJson.extPath}</code>
 					</p>
 				</Card.Footer>
 			</Card.Root>

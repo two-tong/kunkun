@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getExtensionsFolder } from "@/constants"
+	import * as m from "@/paraglide/messages"
 	import { appState, extensions } from "@/stores"
 	import { keys } from "@/stores/keys"
 	import { goBack, goHome } from "@/utils/route"
@@ -81,14 +82,14 @@
 			}
 		})
 		if (error)
-			return toast.error("Fail to get latest extension", {
+			return toast.error(m.store_fail_latest(), {
 				description: error.error
 			})
 		const installExtras = await getInstallExtras(data?.metadata)
 		return extensions
 			.upgradeStoreExtension(ext.identifier, data.tarball_path, installExtras)
 			.then((newExt) => {
-				toast.success(`${ext.name} Upgraded to ${newExt.version}`)
+				toast.success(m.store_upgraded({ name: ext.name, version: newExt.version }))
 			})
 	}
 
@@ -99,7 +100,7 @@
 			}
 		})
 		if (error)
-			return toast.error("Fail to get latest extension", {
+			return toast.error(m.store_fail_latest(), {
 				description: error.error
 			})
 
@@ -107,7 +108,7 @@
 		const installDir = await getExtensionsFolder()
 		return extensions
 			.installFromTarballUrl(data.tarball_path, installDir, installExtras)
-			.then(() => toast.success(`Plugin ${ext.name} Installed`))
+			.then(() => toast.success(m.store_installed({ name: ext.name })))
 			.then(() =>
 				postExtensionsIncrementDownloads({
 					body: {
@@ -180,7 +181,7 @@
 	<CustomCommandInput
 		bind:ref={listviewInputRef}
 		autofocus
-		placeholder="Type / to focus"
+		placeholder={m.store_search_placeholder()}
 		leftSlot={leftSlot as Snippet}
 		bind:value={$appState.searchTerm}
 		onkeydown={(e) => {
@@ -199,7 +200,7 @@
 		}}
 	/>
 	<Command.List class="max-h-screen grow">
-		<Command.Empty>No results found.</Command.Empty>
+		<Command.Empty>{m.common_no_results_found()}</Command.Empty>
 		{#each storeExtList as ext}
 			<ExtListItem
 				{ext}
@@ -214,14 +215,21 @@
 		{/each}
 	</Command.List>
 	<GlobalCommandPaletteFooter
-		defaultAction="Show Details"
+		defaultAction={m.store_show_details()}
+		actionPanelLabels={{
+			actions: m.common_actions(),
+			selectAction: m.common_select_action(),
+			noActionFound: m.common_no_action_found()
+		}}
 		bind:actionPanelOpen
 		{onActionPanelBlur}
 		actionPanel={new Action.ActionPanel({
-			title: "Actions",
+			title: m.store_actions(),
 			items: [
 				new Action.Action({
-					title: `Install (${_platform === "macos" ? "⌘" : "Ctrl"} + ⏎)`,
+					title: m.store_install_shortcut({
+						shortcut: _platform === "macos" ? "⌘" : "Ctrl"
+					}),
 					value: "install"
 				})
 			]

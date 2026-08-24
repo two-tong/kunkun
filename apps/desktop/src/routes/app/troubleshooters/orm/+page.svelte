@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import {
 		getAllCmds,
 		getAllExtensions,
@@ -30,34 +31,34 @@
 				.then((cmds) => {
 					console.log(cmds)
 					data = cmds
-					inspectTitle = "All Commands"
+					inspectTitle = m.troubleshooters_orm_all_commands()
 				})
 				.catch((e) => {
 					console.error(e)
-					toast.error("Failed to get all commands", {
-						description: "See console for more details"
+					toast.error(m.troubleshooters_orm_failed_get_all_commands(), {
+						description: m.troubleshooters_orm_see_console()
 					})
 				})
 		}}
 	>
-		Get All Commands
+		{m.troubleshooters_orm_get_all_commands()}
 	</Button>
 	<Button
 		onclick={() => {
 			getAllExtensions()
 				.then((exts) => {
 					data = exts
-					inspectTitle = "All Extensions"
+					inspectTitle = m.troubleshooters_orm_all_extensions()
 				})
 				.catch((e) => {
 					console.error(e)
-					toast.error("Failed to get all extensions", {
-						description: "See console for more details"
+					toast.error(m.troubleshooters_orm_failed_get_all_extensions(), {
+						description: m.troubleshooters_orm_see_console()
 					})
 				})
 		}}
 	>
-		Get All Extensions
+		{m.troubleshooters_orm_get_all_extensions()}
 	</Button>
 
 	<Button
@@ -76,7 +77,7 @@
 			// data = exts
 		}}
 	>
-		Get Unique Extension By Identifier and Path
+		{m.troubleshooters_orm_get_unique_extension()}
 	</Button>
 	<!-- <Button
 		onclick={async () => {
@@ -95,10 +96,10 @@
 		onclick={async () => {
 			const _data = await getExtensionDataById(1, ["search_text", "data"])
 			data = _data
-			inspectTitle = "Extension Data"
+			inspectTitle = m.troubleshooters_orm_extension_data()
 		}}
 	>
-		Get Extension Data By ID
+		{m.troubleshooters_orm_get_extension_data_by_id()}
 	</Button>
 	<form
 		class="flex gap-1"
@@ -114,11 +115,11 @@
 			})
 			console.log(_data)
 			data = _data
-			inspectTitle = "Search Results"
+			inspectTitle = m.troubleshooters_orm_search_results()
 		}}
 	>
-		<Input class="" bind:value={searchText} placeholder="Search Text" />
-		<Button class="" type="submit">Search Extension Data</Button>
+		<Input class="" bind:value={searchText} placeholder={m.troubleshooters_orm_search_text()} />
+		<Button class="" type="submit">{m.troubleshooters_orm_search_extension_data()}</Button>
 	</form>
 	<Inspect name={inspectTitle} value={data} expandLevel={2} />
 </main>

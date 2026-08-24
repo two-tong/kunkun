@@ -5,10 +5,13 @@
 	import { DraggableCommandGroup } from "../custom"
 	import type { BuiltinCmd, CmdValue } from "./types"
 
-	const { builtinCmds }: { builtinCmds: BuiltinCmd[] } = $props()
+	const {
+		builtinCmds,
+		heading = "Builtin Commands"
+	}: { builtinCmds: BuiltinCmd[]; heading?: string } = $props()
 </script>
 
-<DraggableCommandGroup heading="Builtin Commands">
+<DraggableCommandGroup {heading}>
 	{#each builtinCmds as cmd (`builtin-${cmd.name}`)}
 		<Command.Item
 			class="flex justify-between"

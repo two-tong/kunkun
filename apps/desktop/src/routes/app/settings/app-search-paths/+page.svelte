@@ -28,10 +28,10 @@
 			}
 			const { path, depth } = form.data
 			if (!(await fs.exists(path))) {
-				return toast.error("Path does not exist")
+				return toast.error(m.settings_app_search_paths_path_not_exist())
 			}
 			appConfig.addAppSearchPath({ path, depth })
-			toast.success("Search Path Added")
+			toast.success(m.settings_app_search_paths_added())
 			appsLoader.init()
 			cancel()
 		}
@@ -51,7 +51,7 @@
 <main class="container flex flex-col space-y-2">
 	<h1 class="text-2xl font-bold">{m.settings_app_search_paths_title()}</h1>
 	{#if $appConfig.developerMode}
-		<Inspect name="Extra App Search Paths" value={$appConfig.appSearchPaths} />
+		<Inspect name={m.settings_app_search_paths_title()} value={$appConfig.appSearchPaths} />
 	{/if}
 	<form method="POST" use:enhance>
 		<Form.Field {form} name="path">
@@ -65,7 +65,9 @@
 							bind:value={$formData.path}
 							placeholder={m.settings_app_search_paths_table_col_search_path()}
 						/>
-						<Form.Button class="my-1" onclick={pickSearchPath}>Pick</Form.Button>
+						<Form.Button class="my-1" onclick={pickSearchPath}>
+							{m.settings_app_search_paths_pick()}
+						</Form.Button>
 					</div>
 				{/snippet}
 			</Form.Control>
@@ -123,11 +125,11 @@
 							variant="destructive"
 							onclick={() => {
 								appConfig.removeAppSearchPath(appSearchPath)
-								toast.error("Search Path Removed")
+								toast.error(m.settings_app_search_paths_removed())
 								appsLoader.init()
 							}}
 						>
-							Remove
+							{m.settings_app_search_paths_remove()}
 						</Button>
 					</Table.Cell>
 				</Table.Row>

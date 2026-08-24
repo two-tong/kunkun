@@ -1,3 +1,4 @@
+import * as m from "@/paraglide/messages"
 import { extensions } from "@/stores"
 import { isCompatible } from "@kksh/api"
 import type { ExtPackageJsonExtra } from "@kksh/api/models"
@@ -15,15 +16,13 @@ export async function checkUpdateAndInstall({ beta }: { beta?: boolean } = {}) {
 		}
 	})
 	if (update?.available) {
-		const confirmUpdate = await confirm(
-			`A new version ${update.version} is available. Do you want to install and relaunch?`
-		)
+		const confirmUpdate = await confirm(m.updater_available_confirm({ version: update.version }))
 		if (confirmUpdate) {
 			await update.downloadAndInstall()
 			await relaunch()
 		}
 	} else {
-		toast.info("You are on the latest version")
+		toast.info(m.updater_latest())
 	}
 }
 
@@ -44,9 +43,9 @@ export async function checkSingleExtensionUpdate(
 	// 	installedExt.kunkun.identifier
 	// )
 	if (error) {
-		return toast.error(
-			`Failed to check update for ${installedExt.kunkun.identifier}: ${error} (${response.status})`
-		)
+		return toast.error(m.updater_check_failed({ identifier: installedExt.kunkun.identifier }), {
+			description: `${error} (${response.status})`
+		})
 	}
 
 	if (!sbExt) {
@@ -61,18 +60,24 @@ export async function checkSingleExtensionUpdate(
 			await extensions
 				.upgradeStoreExtension(sbExt.identifier, sbExt.tarball_path)
 				.then(() => {
-					toast.success(`${sbExt.name} upgraded`, {
-						description: `From ${installedExt.version} to ${sbExt.version}`
+					toast.success(m.updater_upgraded({ name: sbExt.name }), {
+						description: m.updater_upgraded_description({
+							from: installedExt.version,
+							to: sbExt.version
+						})
 					})
 				})
 				.catch((err) => {
-					toast.error(`Failed to upgrade ${sbExt.name}`, { description: err })
+					toast.error(m.updater_upgrade_failed({ name: sbExt.name }), { description: err })
 				})
 			return true
 		} else {
 			console.log(`new version available ${installedExt.kunkun.identifier} ${sbExt.version}`)
 			toast.info(
-				`Extension ${installedExt.kunkun.identifier} has a new version ${sbExt.version}, you can upgrade in Store.`,
+				m.updater_new_version({
+					identifier: installedExt.kunkun.identifier,
+					version: sbExt.version
+				}),
 				{ duration: 10_000 }
 			)
 		}
@@ -90,6 +95,6 @@ export async function checkExtensionUpdate(autoupgrade: boolean = false) {
 	}
 
 	if (upgradedCount > 0) {
-		toast.info(`${upgradedCount} extensions have been upgraded`)
+		toast.info(m.updater_upgraded_count({ count: upgradedCount }))
 	}
 }

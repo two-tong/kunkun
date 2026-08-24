@@ -3,6 +3,8 @@
 	import Moon from "lucide-svelte/icons/moon"
 	import Sun from "lucide-svelte/icons/sun"
 	import { toggleMode } from "mode-watcher"
+
+	let { label = "Toggle theme" }: { label?: string } = $props()
 </script>
 
 <Button onclick={toggleMode} variant="outline" size="icon" class="shrink-0">
@@ -12,5 +14,5 @@
 	<Moon
 		class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
 	/>
-	<span class="sr-only">Toggle theme</span>
+	<span class="sr-only">{label}</span>
 </Button>

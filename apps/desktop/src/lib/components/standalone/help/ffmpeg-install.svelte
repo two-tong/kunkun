@@ -1,5 +1,6 @@
 <script lang="ts">
 	import InstallCodeBlock from "@/components/common/install-code-block.svelte"
+	import * as m from "@/paraglide/messages"
 	import Icon from "@iconify/svelte"
 	import { IconEnum } from "@kksh/api/models"
 	import { Button, Tabs } from "@kksh/svelte5"
@@ -34,24 +35,23 @@
 	}
 </script>
 
-<h1 class="font-mono text-2xl font-bold">Install ffmpeg</h1>
+<h1 class="font-mono text-2xl font-bold">{m.help_install_ffmpeg()}</h1>
 <p class="font-mono text-sm">
-	Some extensions require ffmpeg to enable advanced features. ffmpeg is optional but recommended.
+	{m.help_ffmpeg_dependency_hint()}
 </p>
 <p class="font-mono text-sm">
-	For example, the YouTube video downloader extension requires `ffmpeg` to merge audio and video;
-	`ffmpeg` is also used in video processing extensions.
+	{m.help_ffmpeg_example_hint()}
 </p>
 {#if alreadyInstalled}
 	<div class="flex items-center gap-2 font-mono text-sm">
 		<span>✅</span>
-		<span>ffmpeg is already installed at </span>
+		<span>{m.help_ffmpeg_installed_at()}</span>
 		<pre class="text-sm">{ffmpegPath}</pre>
 	</div>
 {:else}
 	<div class="flex items-center gap-2 font-mono text-sm">
 		<span>❌</span>
-		<span>ffmpeg is not installed</span>
+		<span>{m.help_ffmpeg_not_installed()}</span>
 	</div>
 {/if}
 <TauriLink
@@ -60,25 +60,24 @@
 	iconValue="logos:ffmpeg-icon"
 	class="flex items-center gap-2"
 >
-	<span class="font-mono text-lg font-bold">ffmpeg Website</span>
+	<span class="font-mono text-lg font-bold">{m.help_ffmpeg_website()}</span>
 	<Icon icon="logos:ffmpeg-icon" class="h-6 w-6" />
 </TauriLink>
 <p class="font-mono text-sm">
-	You can install ffmpeg from the official website, but it's much easier if you use a package
-	manager of your platform.
+	{m.help_ffmpeg_package_manager_hint()}
 </p>
 <Tabs.Root value={_platform} class="mt-2 w-full">
 	<div class="flex w-full justify-center">
 		<Tabs.List>
-			<Tabs.Trigger value="windows">Windows</Tabs.Trigger>
-			<Tabs.Trigger value="macos">MacOS</Tabs.Trigger>
-			<Tabs.Trigger value="linux">Linux</Tabs.Trigger>
+			<Tabs.Trigger value="windows">{m.help_install_windows()}</Tabs.Trigger>
+			<Tabs.Trigger value="macos">{m.help_install_macos()}</Tabs.Trigger>
+			<Tabs.Trigger value="linux">{m.help_install_linux()}</Tabs.Trigger>
 		</Tabs.List>
 	</div>
 	<Tabs.Content value="macos" class="space-y-2">
 		{#if !brewPath}
 			<p class="font-mono text-sm text-red-400">
-				Homebrew is not installed. Please install Homebrew first.
+				{m.help_homebrew_missing()}
 			</p>
 		{/if}
 		<InstallCodeBlock
@@ -92,7 +91,7 @@
 	<Tabs.Content value="windows" class="space-y-2">
 		{#if !chocoPath}
 			<p class="font-mono text-sm text-red-400">
-				Chocolatey is not installed. Please install Chocolatey first.
+				{m.help_chocolatey_missing()}
 			</p>
 		{/if}
 		<InstallCodeBlock
@@ -105,10 +104,10 @@
 	<Tabs.Content value="linux" class="space-y-2">
 		{#if !aptPath}
 			<p class="font-mono text-sm text-red-400">
-				`apt` is not installed. Please install `apt` first.
+				{m.help_apt_missing()}
 			</p>
 			<p class="font-mono text-sm text-red-400">
-				If you are on a different distro, I believe you can figure it out as a Linux user.
+				{m.help_linux_user_hint()}
 			</p>
 		{/if}
 		<InstallCodeBlock

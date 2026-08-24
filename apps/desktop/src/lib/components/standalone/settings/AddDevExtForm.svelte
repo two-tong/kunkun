@@ -33,32 +33,30 @@
 				await extensions
 					.installDevExtensionDir(path)
 					.then((ext) => {
-						toast.success("Success", {
-							description: `Extension from ${ext.extPath} installed successfully`
+						toast.success(m.common_success(), {
+							description: m.dev_extension_from_path_installed({ path: ext.extPath })
 						})
 					})
 					.catch((err) => {
-						toast.warning("Failed to install extension", { description: err })
+						toast.warning(m.dev_extension_install_failed(), { description: err })
 					})
 			} else if (await stat.isFile) {
 				if (!$appConfig.devExtensionPath) {
-					toast.warning(
-						"Please set the dev extension path in the settings to install tarball extension"
-					)
+					toast.warning(m.dev_extension_set_path_hint())
 					continue
 				}
 				await extensions
 					.installTarball(path, $appConfig.devExtensionPath)
 					.then((ext) => {
-						toast.success("Success", {
-							description: `Extension from ${path} installed successfully`
+						toast.success(m.common_success(), {
+							description: m.dev_extension_from_path_installed({ path })
 						})
 					})
 					.catch((err) => {
-						toast.warning("Failed to install extension", { description: err })
+						toast.warning(m.dev_extension_install_failed(), { description: err })
 					})
 			} else {
-				toast.warning(`Unsupported file type: ${path}`)
+				toast.warning(m.dev_extension_file_type_unsupported({ path }))
 			}
 			// await installDevExtensionDir(path)
 		}
@@ -72,25 +70,25 @@
 		})
 		appState.setLockHideOnBlur(false)
 		if (!selected) {
-			return toast.warning("No File Selected")
+			return toast.warning(m.common_no_file_selected())
 		}
 		for (const dir of selected) {
 			await extensions
 				.installDevExtensionDir(dir)
 				.then((ext) => {
-					toast.success("Success", {
-						description: `Extension from ${ext.extPath} installed successfully`
+					toast.success(m.common_success(), {
+						description: m.dev_extension_from_path_installed({ path: ext.extPath })
 					})
 				})
 				.catch((err) => {
-					toast.warning("Failed to install extension", { description: err })
+					toast.warning(m.dev_extension_install_failed(), { description: err })
 				})
 		}
 	}
 
 	async function pickExtFiles() {
 		if (!$appConfig.devExtensionPath) {
-			toast.warning("Please set the dev extension path in the settings")
+			toast.warning(m.dev_extension_set_path_hint())
 			return goto(i18n.resolveRoute("/app/settings/set-dev-ext-path"))
 		}
 		appState.setLockHideOnBlur(true)
@@ -106,7 +104,7 @@
 		})
 		appState.setLockHideOnBlur(false)
 		if (!selected) {
-			return toast.warning("No File Selected")
+			return toast.warning(m.common_no_file_selected())
 		}
 		for (const tarballPath of selected) {
 			await extensions.installTarball(tarballPath, $appConfig.devExtensionPath)

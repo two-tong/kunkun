@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { appConfig, appState } from "@/stores"
 	import { cn } from "@/utils"
 	import { Button } from "@kksh/svelte5"
@@ -31,7 +32,7 @@
 	{:else}
 		<!-- <LoadingAnimation delay={300} autoHide={false} show={!uiControl.iframeLoaded} /> -->
 		<LoaderCircleIcon class="h-24 w-24 animate-spin" />
-		<span class="font-mono">Loading</span>
+		<span class="font-mono">{m.common_loading()}</span>
 	{/if}
 	<BorderBeam size={150} duration={12} />
 </Layouts.Center>

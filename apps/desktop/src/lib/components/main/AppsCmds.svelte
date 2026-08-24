@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { appState } from "@/stores"
 	import { IconEnum, type AppInfo } from "@kksh/api/models"
 	import { Command } from "@kksh/svelte5"
@@ -11,10 +12,10 @@
 	import { executeBashScript, open } from "tauri-plugin-shellx-api"
 
 	const platform = os.platform()
-	let { apps }: { apps: AppInfo[] } = $props()
+	let { apps, heading }: { apps: AppInfo[]; heading: string } = $props()
 </script>
 
-<DraggableCommandGroup heading="Apps">
+<DraggableCommandGroup {heading}>
 	{#each apps.filter((app) => app.name) as app, idx}
 		{@const iconPath = platform === "windows" ? (app.icon_path ?? app.app_path_exe) : app.icon_path}
 		<Command.Item
@@ -24,7 +25,7 @@
 					if (app.app_path_exe) {
 						open(app.app_path_exe)
 					} else {
-						toast.error("No executable path found for this app")
+						toast.error(m.common_app_no_executable())
 					}
 				} else if (platform === "macos") {
 					open(app.app_desktop_path)
@@ -32,10 +33,10 @@
 					if (app.app_path_exe) {
 						executeBashScript(app.app_path_exe)
 					} else {
-						toast.error("No executable path found for this app")
+						toast.error(m.common_app_no_executable())
 					}
 				} else {
-					toast.error("Unsupported platform")
+					toast.error(m.common_unsupported_platform())
 				}
 				await getCurrentWindow().hide()
 				appState.clearSearchTerm()

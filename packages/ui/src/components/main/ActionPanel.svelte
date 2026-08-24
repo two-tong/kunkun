@@ -10,11 +10,21 @@
 
 	let {
 		actionPanel,
+		labels = {
+			actions: "Actions",
+			selectAction: "Select an Action",
+			noActionFound: "No action found."
+		},
 		open = $bindable(false),
 		onActionSelected,
 		onBlur
 	}: {
 		actionPanel?: ActionSchema.ActionPanel
+		labels?: {
+			actions: string
+			selectAction: string
+			noActionFound: string
+		}
 		open?: boolean
 		onActionSelected?: (value: string) => void
 		onBlur?: () => void
@@ -41,7 +51,7 @@
 		<!-- eslint-disable-next-line @typescript-eslint/no-explicit-any -->
 		{#snippet child({ props }: { props: any })}
 			<Button variant="ghost" class="" {...props} role="combobox" aria-expanded={open}>
-				Actions
+				{labels.actions}
 				<span class="flex items-center gap-0.5" data-tauri-drag-region>
 					<Kbd class="w-fit">
 						{#if isMac}
@@ -60,7 +70,7 @@
 	<Popover.Content class="w-64 p-0">
 		<Command.Root vimBindings={false}>
 			<Command.Input
-				placeholder="Select an Action"
+				placeholder={labels.selectAction}
 				onkeydown={(e) => {
 					if (e.key === "Escape") {
 						closeAndFocusTrigger()
@@ -68,7 +78,7 @@
 				}}
 			/>
 			<Command.List>
-				<Command.Empty>No action found.</Command.Empty>
+				<Command.Empty>{labels.noActionFound}</Command.Empty>
 				<Command.Group>
 					{#each actionPanel?.items ?? [] as action}
 						<Command.Item

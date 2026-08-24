@@ -5,7 +5,27 @@
 	import { open } from "tauri-plugin-shellx-api"
 	import IconMultiplexer from "./IconMultiplexer.svelte"
 
-	let { icon = $bindable<Icon>(), class: className }: { icon?: Icon; class?: string } = $props()
+	let {
+		icon = $bindable<Icon>(),
+		class: className,
+		labels = {
+			type: "Icon Type",
+			value: "Icon Value",
+			pickName: "Pick Iconify icon name",
+			invertColor: "Invert Icon Color",
+			preview: "Icon Preview"
+		}
+	}: {
+		icon?: Icon
+		class?: string
+		labels?: {
+			type: string
+			value: string
+			pickName: string
+			invertColor: string
+			preview: string
+		}
+	} = $props()
 	const iconOptions: Record<string, IconType> = {
 		"Remote Url": IconEnum.RemoteUrl,
 		Iconify: IconEnum.Iconify,
@@ -14,7 +34,7 @@
 	}
 	const iconOptionsArray = $derived(Object.entries(iconOptions))
 	const triggerContent = $derived(
-		iconOptionsArray.find(([_, value]) => value === icon.type)?.[0] ?? "Select a fruit"
+		iconOptionsArray.find(([_, value]) => value === icon.type)?.[0] ?? labels.type
 	)
 </script>
 
@@ -25,17 +45,17 @@
 		</Select.Trigger>
 		<Select.Content>
 			<Select.Group>
-				<Select.GroupHeading>Icon Type</Select.GroupHeading>
+				<Select.GroupHeading>{labels.type}</Select.GroupHeading>
 				{#each iconOptionsArray as [label, value]}
 					<Select.Item {value}>{label}</Select.Item>
 				{/each}
 			</Select.Group>
 		</Select.Content>
 	</Select.Root>
-	<Textarea bind:value={icon.value} placeholder="Icon Value" />
+	<Textarea bind:value={icon.value} placeholder={labels.value} />
 	{#if icon.type === IconEnum.Iconify}
 		<Button onclick={() => open("https://icon-sets.iconify.design/")} size="sm" variant="secondary">
-			Pick Iconify icon name
+			{labels.pickName}
 		</Button>
 	{/if}
 
@@ -46,10 +66,10 @@
 			for="terms"
 			class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 		>
-			Invert Icon Color
+			{labels.invertColor}
 		</Label>
 	</div>
-	<h2 class="font-semibold">Icon Preview</h2>
+	<h2 class="font-semibold">{labels.preview}</h2>
 	{#if icon.type && icon.value && icon.value.length > 0}
 		<IconMultiplexer class="h-12 w-12" {icon} />
 	{/if}

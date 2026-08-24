@@ -3,6 +3,7 @@
 	import DenoInstall from "@/components/standalone/help/deno-install.svelte"
 	import FFmpegInstall from "@/components/standalone/help/ffmpeg-install.svelte"
 	import { i18n } from "@/i18n"
+	import * as m from "@/paraglide/messages"
 	import { appConfig } from "@/stores/appConfig"
 	import { Button } from "@kksh/svelte5"
 	import { goto } from "$app/navigation"
@@ -47,15 +48,12 @@
 <main class="container">
 	<div class="left-0 top-0 h-10 w-full" data-tauri-drag-region></div>
 	{#if step === Step.Welcome}
-		<h1 class="text-3xl font-bold">Welcome to Kunkun</h1>
-		<p>
-			This is a on boarding page to help you set up Kunkun with some basic settings and optional
-			dependencies.
-		</p>
-		<div>Click <strong>Next</strong> to continue</div>
+		<h1 class="text-3xl font-bold">{m.help_onboarding_welcome()}</h1>
+		<p>{m.help_onboarding_description()}</p>
+		<div>{m.help_onboarding_next_hint()}</div>
 	{:else if step === Step.GeneralSettings}
-		<h1 class="text-2xl font-bold">General Settings</h1>
-		<small> You can change these settings later in the settings page. </small>
+		<h1 class="text-2xl font-bold">{m.help_onboarding_general_settings()}</h1>
+		<small>{m.help_onboarding_settings_later()}</small>
 		<GeneralSettings />
 	{:else if step === Step.DenoInstall}
 		<DenoInstall />

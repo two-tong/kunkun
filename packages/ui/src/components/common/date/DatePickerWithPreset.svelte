@@ -12,8 +12,27 @@
 		date = $bindable(),
 		dateValue = $bindable(),
 		class: className,
-		value = $bindable()
-	}: { date?: Date; dateValue?: DateValue; class?: string; value?: string } = $props()
+		value = $bindable(),
+		labels = {
+			pickDate: "Pick a date",
+			today: "Today",
+			tomorrow: "Tomorrow",
+			inDays: (count: number) => `In ${count} days`,
+			inWeek: "In a week"
+		}
+	}: {
+		date?: Date
+		dateValue?: DateValue
+		class?: string
+		value?: string
+		labels?: {
+			pickDate: string
+			today: string
+			tomorrow: string
+			inDays: (count: number) => string
+			inWeek: string
+		}
+	} = $props()
 	const valueString = $derived(dateValue ? df.format(dateValue.toDate(getLocalTimeZone())) : "")
 	$effect(() => {
 		value = dateValue ? dateValue.toString() : ""
@@ -22,10 +41,10 @@
 		}
 	})
 	const items = [
-		{ value: 0, label: "Today" },
-		{ value: 1, label: "Tomorrow" },
-		{ value: 3, label: "In 3 days" },
-		{ value: 7, label: "In a week" }
+		{ value: 0, label: labels.today },
+		{ value: 1, label: labels.tomorrow },
+		{ value: 3, label: labels.inDays(3) },
+		{ value: 7, label: labels.inWeek }
 	]
 </script>
 
@@ -41,7 +60,7 @@
 		)}
 	>
 		<CalendarIcon class="mr-2 size-4" />
-		{dateValue ? df.format(dateValue.toDate(getLocalTimeZone())) : "Pick a date"}
+		{dateValue ? df.format(dateValue.toDate(getLocalTimeZone())) : labels.pickDate}
 	</Popover.Trigger>
 	<Popover.Content class="flex w-auto flex-col space-y-2 p-2">
 		<Select.Root

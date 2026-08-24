@@ -12,11 +12,39 @@
 	let {
 		formViewContent,
 		class: className,
-		onSubmit
+		onSubmit,
+		labels = {
+			select: "Select",
+			submit: "Submit",
+			arrayUnsupported: "Arrays are not supported yet",
+			nestedUnsupported: "Nested forms are not supported yet",
+			fieldUnsupported: "This field type is not supported yet",
+			date: {
+				pickDate: "Pick a date",
+				today: "Today",
+				tomorrow: "Tomorrow",
+				inDays: (count: number) => `In ${count} days`,
+				inWeek: "In a week"
+			}
+		}
 	}: {
 		formViewContent: FormSchema.Form
 		class?: string
 		onSubmit?: (formData: Record<string, string | number | boolean>) => void
+		labels?: {
+			select: string
+			submit: string
+			arrayUnsupported: string
+			nestedUnsupported: string
+			fieldUnsupported: string
+			date: {
+				pickDate: string
+				today: string
+				tomorrow: string
+				inDays: (count: number) => string
+				inWeek: string
+			}
+		}
 	} = $props()
 	let formRef = $state<HTMLFormElement | null>(null)
 	const formSchema = $derived(buildFormSchema(formViewContent))
@@ -81,12 +109,16 @@
 				/>
 			{:else if field.nodeName === FormNodeNameEnum.Date}
 				{@const field2 = field as FormSchema.DateField}
-				<DatePickerWithPreset class="w-full" bind:date={$formData[field2.key]} />
+				<DatePickerWithPreset
+					class="w-full"
+					bind:date={$formData[field2.key]}
+					labels={labels.date}
+				/>
 			{:else if field.nodeName === FormNodeNameEnum.Select}
 				{@const field2 = field as FormSchema.SelectField}
 				<Select.Root type="single" name="favoriteFruit" bind:value={$formData[field2.key]}>
 					<Select.Trigger class="w-80">
-						{$formData[field2.key] ? $formData[field2.key] : "Select"}
+						{$formData[field2.key] ? $formData[field2.key] : labels.select}
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Group>
@@ -99,14 +131,14 @@
 				</Select.Root>
 			{:else if field.nodeName === FormNodeNameEnum.Array}
 				<span>
-					Array is not supported yet
+					{labels.arrayUnsupported}
 					<TauriLink href="https://github.com/kunkunsh/kunkun/issues/19"
 						>Tracked at https://github.com/kunkunsh/kunkun/issues/19</TauriLink
 					>
 				</span>
 			{:else if field.nodeName === FormNodeNameEnum.Form}
 				<span>
-					Nested Form is not supported yet
+					{labels.nestedUnsupported}
 					<TauriLink href="https://github.com/kunkunsh/kunkun/issues/19"
 						>Tracked at https://github.com/kunkunsh/kunkun/issues/19</TauriLink
 					>
@@ -125,7 +157,7 @@
 				</div>
 			{:else}
 				<span>
-					{field.nodeName} is not supported yet
+					{labels.fieldUnsupported}
 					<TauriLink href="https://github.com/kunkunsh/kunkun/issues/19"
 						>Tracked at https://github.com/kunkunsh/kunkun/issues/19</TauriLink
 					>
@@ -136,7 +168,7 @@
 			{/if}
 			{@render error($errors[field.key] as string[] | undefined)}
 		{/each}
-		<Button type="submit">{formViewContent.submitBtnText ?? "Submit"}</Button>
+		<Button type="submit">{formViewContent.submitBtnText ?? labels.submit}</Button>
 	</form>
 {/key}
 {#if formViewContent.showFormDataDebug}

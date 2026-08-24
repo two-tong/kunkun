@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getExtensionsFolder } from "@/constants.js"
 	import { i18n } from "@/i18n.js"
+	import * as m from "@/paraglide/messages"
 	import { extensions, installedStoreExts } from "@/stores/extensions.js"
 	import { DBExtension, ExtensionStoreListItem, ExtPackageJson, ExtPublish } from "@kksh/api/models"
 	import { postExtensionsIncrementDownloads } from "@kksh/sdk"
@@ -80,7 +81,7 @@
 		const installDir = await getExtensionsFolder()
 		return extensions
 			.installFromTarballUrl(extPublish.tarball_path, installDir, installExtras)
-			.then(() => toast.success(`Plugin ${extPublish.name} Installed`))
+			.then(() => toast.success(m.store_installed({ name: extPublish.name })))
 			.then((loadedExt) => {
 				info(`Successfully installed ${extPublish.name}`)
 				postExtensionsIncrementDownloads({
@@ -100,7 +101,7 @@
 			})
 			.catch((err) => {
 				error(`Fail to install tarball (${extPublish.identifier}): ${err}`)
-				toast.error("Fail to install tarball", { description: err })
+				toast.error(m.store_fail_install_tarball(), { description: err })
 			})
 			.finally(() => {
 				loading.install = false
@@ -113,11 +114,15 @@
 			.upgradeStoreExtension(extPublish.identifier, extPublish.tarball_path)
 			.then((newExt) => {
 				toast.success(
-					`${extPublish.name} Upgraded from ${$installedExt?.version} to ${newExt.version}`
+					m.store_upgraded_from_to({
+						name: extPublish.name,
+						from: $installedExt?.version ?? "?",
+						to: newExt.version
+					})
 				)
 			})
 			.catch((err) => {
-				toast.error("Fail to upgrade extension", { description: err })
+				toast.error(m.store_fail_upgrade(), { description: err })
 			})
 			.finally(() => {
 				setTimeout(() => {
@@ -133,13 +138,13 @@
 		return extensions
 			.uninstallStoreExtensionByIdentifier(extPublish.identifier)
 			.then((uninstalledExt) => {
-				toast.success(`${uninstalledExt.name} Uninstalled`)
+				toast.success(m.store_uninstalled({ name: uninstalledExt.name }))
 				loading.uninstall = false
 				showBtn.uninstall = false
 				showBtn.install = true
 			})
 			.catch((err) => {
-				toast.error("Fail to uninstall extension", { description: err })
+				toast.error(m.store_fail_uninstall(), { description: err })
 				error(`Fail to uninstall store extension (${extPublish.identifier}): ${err}`)
 			})
 			.finally(() => {})
@@ -172,6 +177,33 @@
 </Button>
 <StoreExtDetail
 	class="px-5"
+	labels={{
+		upgrade: m.store_detail_upgrade(),
+		uninstall: m.store_detail_uninstall(),
+		install: m.store_detail_install(),
+		version: m.store_detail_version(),
+		downloads: m.store_detail_downloads(),
+		size: m.store_detail_size(),
+		publishedAt: m.store_detail_published_at(),
+		securityPrivacy: m.store_detail_security_privacy(),
+		description: m.store_detail_description(),
+		commands: m.store_detail_commands(),
+		publisherProfile: m.store_detail_publisher_profile(),
+		author: m.store_detail_author(),
+		notAvailable: m.store_detail_not_available(),
+		contributors: m.store_detail_contributors(),
+		readme: m.store_detail_readme(),
+		provenance: {
+			builtSignedOn: m.provenance_built_signed_on(),
+			viewBuildSummary: m.provenance_view_build_summary(),
+			sourceCommit: m.provenance_source_commit(),
+			buildFile: m.provenance_build_file(),
+			publicLedger: m.provenance_public_ledger(),
+			transparencyLog: m.provenance_transparency_log(),
+			mirror: m.provenance_mirror(),
+			mirrorRepo: m.provenance_mirror_repo()
+		}
+	}}
 	{packageJson}
 	{extPublish}
 	{ext}

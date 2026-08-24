@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { keyCodeToKey, keyCombToDisplay } from "@/utils/js"
 	import { isShortcut } from "@/utils/key"
 	import { Button, Input } from "@kksh/svelte5"
@@ -77,5 +78,5 @@
 		}}
 		onblur={() => (recording = false)}
 	/>
-	<Button size="sm" type="submit" variant="outline">Submit</Button>
+	<Button size="sm" type="submit" variant="outline">{m.common_submit()}</Button>
 </form>

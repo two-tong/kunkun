@@ -56,8 +56,8 @@
 		results = tmpResults
 		const numErrors = results.filter((r) => r.error).length
 		const toastFn = numErrors > 0 ? toast.error : toast.info
-		toastFn(`${numErrors} errors found`, {
-			description: numErrors > 0 ? "Click on an error to see more details" : undefined
+		toastFn(m.troubleshooters_extension_loading_error_count({ count: numErrors }), {
+			description: numErrors > 0 ? m.troubleshooters_extension_loading_click_error() : undefined
 		})
 	}
 
@@ -66,7 +66,7 @@
 			isDialogOpen = true
 			errorMsg = errMsg
 		} else {
-			toast.info("No error message")
+			toast.info(m.troubleshooters_extension_loading_no_error())
 		}
 	}
 
@@ -81,13 +81,13 @@
 	<Dialog.Root bind:open={isDialogOpen}>
 		<Dialog.Content class="sm:max-w-[425px]">
 			<Dialog.Header>
-				<Dialog.Title>Error Details</Dialog.Title>
+				<Dialog.Title>{m.troubleshooters_extension_loading_error_details()}</Dialog.Title>
 			</Dialog.Header>
 			{errorMsg}
 		</Dialog.Content>
 	</Dialog.Root>
 	<Table.Root>
-		<Table.Caption>A list of your extensions.</Table.Caption>
+		<Table.Caption>{m.troubleshooters_extension_loading_caption()}</Table.Caption>
 		<Table.Header>
 			<Table.Row>
 				<Table.Head class=""

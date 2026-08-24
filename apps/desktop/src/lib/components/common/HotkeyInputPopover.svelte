@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { cn } from "@/utils"
 	import { keyCombToDisplay } from "@/utils/js"
 	import { ButtonModule, Input, Label, Popover } from "@kksh/svelte5"
@@ -26,7 +27,7 @@
 	>
 		<!-- <button>recording: {recording}</button> -->
 		{#if savedHotkey.length === 0}
-			<span>Record Hotkey</span>
+			<span>{m.common_record_hotkey()}</span>
 		{:else}
 			<span>{keyCombToDisplay(savedHotkey)}</span>
 		{/if}

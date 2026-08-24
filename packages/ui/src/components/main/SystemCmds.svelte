@@ -7,11 +7,16 @@
 
 	const {
 		systemCommands,
-		onConfirm
-	}: { systemCommands: SysCommand[]; onConfirm?: (cmd: SysCommand) => Promise<boolean> } = $props()
+		onConfirm,
+		heading = "System Commands"
+	}: {
+		systemCommands: SysCommand[]
+		onConfirm?: (cmd: SysCommand) => Promise<boolean>
+		heading?: string
+	} = $props()
 </script>
 
-<DraggableCommandGroup heading="System Commands">
+<DraggableCommandGroup {heading}>
 	{#each systemCommands as cmd (`system-cmds-${cmd.name}`)}
 		<Command.Item
 			class="flex justify-between"

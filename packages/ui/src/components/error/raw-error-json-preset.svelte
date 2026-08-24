@@ -11,7 +11,8 @@
 		class: className,
 		rawJsonError,
 		onGoBack,
-		footer: footer2
+		footer: footer2,
+		labels = { rawJson: "Raw Error JSON", goBack: "Go Back" }
 	}: {
 		title: string
 		message: string
@@ -19,6 +20,7 @@
 		rawJsonError: string
 		onGoBack?: () => void
 		footer?: Snippet
+		labels?: { rawJson: string; goBack: string }
 	} = $props()
 
 	let enterDown = $state(false)
@@ -41,7 +43,7 @@
 <Error.General {title} {message} class={className}>
 	<Collapsible.Root class="w-full space-y-2">
 		<div class="flex items-center justify-between space-x-4 px-4">
-			<h4 class="text-sm font-semibold">Raw Error JSON</h4>
+			<h4 class="text-sm font-semibold">{labels.rawJson}</h4>
 			<Collapsible.Trigger
 				class={ButtonModule.buttonVariants({ variant: "ghost", size: "sm", class: "w-9 p-0" })}
 			>
@@ -60,7 +62,7 @@
 			{@render footer2()}
 		{:else}
 			<Button variant="default" class="w-full" onclick={onGoBack} disabled={enterDown}>
-				Go Back
+				{labels.goBack}
 				<Icon icon="mi:enter" />
 			</Button>
 		{/if}

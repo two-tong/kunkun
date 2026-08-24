@@ -5,7 +5,15 @@
 	import { ImageIcon } from "lucide-svelte"
 	import IconMultiplexer from "./IconMultiplexer.svelte"
 
-	const { icon, class: className }: { icon?: Icon; class?: string } = $props()
+	const {
+		icon,
+		class: className,
+		labels = { select: "Select Icon", type: "Icon Type", save: "Save" }
+	}: {
+		icon?: Icon
+		class?: string
+		labels?: { select: string; type: string; save: string }
+	} = $props()
 	function onClick(e: MouseEvent) {
 		e.preventDefault()
 		e.stopPropagation()
@@ -22,7 +30,7 @@
 	}
 	const iconOptionsArray = $derived(Object.entries(iconOptions))
 	const triggerContent = $derived(
-		iconOptionsArray.find(([_, value]) => value === iconType)?.[0] ?? "Select a fruit"
+		iconOptionsArray.find(([_, value]) => value === iconType)?.[0] ?? labels.type
 	)
 </script>
 
@@ -36,11 +44,11 @@
 
 <Dialog.Root open={true}>
 	<Dialog.Trigger class={ButtonModule.buttonVariants({ variant: "outline" })}>
-		Select Icon
+		{labels.select}
 	</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
-			<Dialog.Title>Select Icon</Dialog.Title>
+			<Dialog.Title>{labels.select}</Dialog.Title>
 			<!-- <Dialog.Description></Dialog.Description> -->
 		</Dialog.Header>
 
@@ -50,7 +58,7 @@
 			</Select.Trigger>
 			<Select.Content>
 				<Select.Group>
-					<Select.GroupHeading>Fruits</Select.GroupHeading>
+					<Select.GroupHeading>{labels.type}</Select.GroupHeading>
 					{#each iconOptionsArray as [label, value]}
 						<Select.Item {value}>{label}</Select.Item>
 					{/each}
@@ -69,7 +77,7 @@
 			</div>
 		</div> -->
 		<Dialog.Footer>
-			<Button type="submit">Save</Button>
+			<Button type="submit">{labels.save}</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>

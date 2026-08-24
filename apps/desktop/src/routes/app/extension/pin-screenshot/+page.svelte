@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { Button } from "@kksh/svelte5"
 	import { Layouts } from "@kksh/ui"
 	import { LogicalSize } from "@tauri-apps/api/dpi"
@@ -84,7 +85,7 @@
 		/>
 	{:else}
 		<Layouts.Center>
-			<p class="text-2xl font-bold">No image found in clipboard</p>
+			<p class="text-2xl font-bold">{m.common_no_image_clipboard()}</p>
 		</Layouts.Center>
 	{/if}
 </main>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import InstallCodeBlock from "@/components/common/install-code-block.svelte"
+	import * as m from "@/paraglide/messages"
 	import { goBackOnEscape } from "@/utils/key"
 	import { goBack } from "@/utils/route"
 	import { Button, Tabs } from "@kksh/svelte5"
@@ -32,8 +33,8 @@
 		denoPath = await whereIsCommand("deno")
 		console.log("new denoPath", denoPath)
 		if (!denoPath) {
-			toast.warning("Installation succeeds, but deno is not found in your PATH", {
-				description: "Please verify by yourself, and restart this app"
+			toast.warning(m.help_deno_path_warning(), {
+				description: m.help_verify_restart_hint()
 			})
 		}
 	}
@@ -45,17 +46,16 @@
 <Button variant="outline" size="icon" onclick={goBack} class="absolute left-2 top-2">
 	<ArrowLeft class="size-4" />
 </Button>
-<h1 class="font-mono text-2xl font-bold">Install Deno</h1>
+<h1 class="font-mono text-2xl font-bold">{m.help_install_deno()}</h1>
 <p class="font-mono text-sm">
-	Some extensions require Deno to enable advanced features. Deno provides a secure, sandboxed
-	runtime environment for executing extension code safely. It is optional but recommended.
+	{m.help_deno_dependency_hint()}
 </p>
-<p class="font-mono text-sm">Choose any installation method below.</p>
+<p class="font-mono text-sm">{m.help_install_method_hint()}</p>
 <!-- <p class="font-mono text-sm">
-	If you are unsure, you can use <strong class="text-lg">Auto Install</strong>.
+		{m.help_auto_install_hint()}
 </p> -->
 <p class="font-mono text-sm text-red-400">
-	After installation, ensure the `deno` command is accessible from your system's PATH.
+	{m.help_deno_path_hint()}
 </p>
 <!-- {#if _platform === "macos" || _platform === "linux"}
 	<p class="font-mono text-sm text-red-400">
@@ -66,21 +66,21 @@
 {#if denoPath}
 	<div class="flex items-center gap-2">
 		<span>✅</span>
-		<span>Deno is already installed at </span>
+		<span>{m.help_deno_installed_at()}</span>
 		<pre class="text-sm">{denoPath}</pre>
 	</div>
 {:else}
 	<div class="flex items-center gap-2">
 		<span>❌</span>
-		<span>Deno is not installed</span>
+		<span>{m.help_deno_not_installed()}</span>
 	</div>
 {/if}
 <Tabs.Root value={_platform} class="mt-2 w-full">
 	<div class="flex w-full justify-center">
 		<Tabs.List>
-			<Tabs.Trigger value="windows">Windows</Tabs.Trigger>
-			<Tabs.Trigger value="macos">MacOS</Tabs.Trigger>
-			<Tabs.Trigger value="linux">Linux</Tabs.Trigger>
+			<Tabs.Trigger value="windows">{m.help_install_windows()}</Tabs.Trigger>
+			<Tabs.Trigger value="macos">{m.help_install_macos()}</Tabs.Trigger>
+			<Tabs.Trigger value="linux">{m.help_install_linux()}</Tabs.Trigger>
 		</Tabs.List>
 	</div>
 	<Tabs.Content value="macos" class="space-y-2">

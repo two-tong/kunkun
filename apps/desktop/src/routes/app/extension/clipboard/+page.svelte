@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { hideAndPaste } from "@/utils/hotkey"
 	import { goHome } from "@/utils/route"
 	import { listenToNewClipboardItem, listenToWindowFocus } from "@/utils/tauri-events"
@@ -174,8 +175,8 @@
 
 	function writeToClipboard(data: ExtData) {
 		if (!data.data) {
-			toast.warning("No data found")
-			return Promise.reject(new Error("No data found"))
+			toast.warning(m.common_no_data_found())
+			return Promise.reject(new Error(m.common_no_data_found()))
 		}
 		const dataType = data?.dataType as ClipboardContentType
 		switch (dataType) {
@@ -188,7 +189,7 @@
 			case "Rtf":
 				return clipboard.writeRtf(data.data)
 			default:
-				return Promise.reject(new Error("Unsupported data type: " + dataType))
+				return Promise.reject(new Error(m.clipboard_unsupported_data_type({ type: dataType })))
 		}
 	}
 
@@ -197,17 +198,17 @@
 			.then((data) => {
 				console.log("data", data)
 				if (!data) {
-					toast.warning("No data found")
-					return Promise.reject(new Error("No data found"))
+					toast.warning(m.common_no_data_found())
+					return Promise.reject(new Error(m.common_no_data_found()))
 				}
 				return writeToClipboard(data).then(async () => {
 					return hideAndPaste(curWin)
 				})
 			})
-			.then(() => toast.success("Copied to clipboard"))
+			.then(() => toast.success(m.common_copied_to_clipboard()))
 			.catch((err) => {
 				console.error(err)
-				toast.error("Failed to fetch data from db", {
+				toast.error(m.clipboard_fail_fetch_data(), {
 					description: err.message
 				})
 			})
@@ -246,7 +247,7 @@
 	<CustomCommandInput
 		onkeydown={onKeyDown}
 		autofocus
-		placeholder="Type a command or search..."
+		placeholder={m.clipboard_search_placeholder()}
 		leftSlot={leftSlot as Snippet}
 		bind:ref={inputEle}
 		bind:value={searchTerm}
@@ -254,7 +255,7 @@
 	<Resizable.PaneGroup direction="horizontal" class="w-full rounded-lg">
 		<Resizable.Pane defaultSize={30} class="">
 			<Command.List class="h-full max-h-full grow" onscroll={onScroll}>
-				<Command.Empty>No results found.</Command.Empty>
+				<Command.Empty>{m.common_no_results_found()}</Command.Empty>
 				{#each clipboardHistoryIds as dataId (dataId)}
 					<Command.Item value={dataId.toString()} onSelect={() => onItemSelected(dataId)}>
 						{@render typeIcon(clipboardHistoryMap[dataId].dataType)}
@@ -268,7 +269,7 @@
 			{#if highlighted}
 				<ContentPreview {highlighted} />
 			{:else}
-				<div class="text-center">No content preview available</div>
+				<div class="text-center">{m.clipboard_no_preview()}</div>
 			{/if}
 		</Resizable.Pane>
 	</Resizable.PaneGroup>

@@ -10,6 +10,7 @@
 		type AvailableLanguageTag
 	} from "@/paraglide/runtime"
 	import { appConfig } from "@/stores"
+	import type { LightMode } from "@kksh/api/models"
 	import { Select, Switch } from "@kksh/svelte5"
 	import type { LoadingAnimation } from "@kksh/types"
 	import * as autoStart from "@tauri-apps/plugin-autostart"
@@ -22,15 +23,27 @@
 	}))
 	let loadingAnimation = $state<LoadingAnimation>("spinning-circle")
 	const loadingAnimations = ["spinning-circle", "kunkun-dancing"] as const
+	const themeModes: { value: LightMode; label: () => string }[] = [
+		{ value: "light", label: m.settings_general_theme_mode_light },
+		{ value: "dark", label: m.settings_general_theme_mode_dark },
+		{ value: "auto", label: m.settings_general_theme_mode_auto }
+	]
 	let launchAtLogin = $state(false)
 	let language = $state(languageTag())
+	let themeMode = $state<LightMode>("auto")
 	onMount(() => {
 		autoStart.isEnabled().then((enabled) => {
 			launchAtLogin = enabled
 		})
 		loadingAnimation = $appConfig.loadingAnimation
+		themeMode = $appConfig.theme.lightMode
 	})
-	const triggerContent = $derived(languages.find((f) => f.value === language)?.label ?? "Language")
+	const triggerContent = $derived(
+		languages.find((f) => f.value === language)?.label ?? m.settings_general_language()
+	)
+	const themeModeTriggerContent = $derived(
+		themeModes.find((mode) => mode.value === themeMode)?.label() ?? m.settings_general_theme_mode()
+	)
 </script>
 
 <ul class="rounded-lg border">
@@ -42,10 +55,10 @@
 				const action = checked ? autoStart.enable : autoStart.disable
 				action()
 					.then(() => {
-						toast.success(checked ? "Enabled" : "Disabled")
+						toast.success(checked ? m.common_enabled() : m.common_disabled())
 					})
 					.catch((err) => {
-						toast.error(checked ? "Failed to enable" : "Failed to disable", {
+						toast.error(checked ? m.common_failed_to_enable() : m.common_failed_to_disable(), {
 							description: err.message
 						})
 					})
@@ -106,6 +119,33 @@
 		</Select.Root>
 	</li>
 	<li>
+		<span>{m.settings_general_theme_mode()}</span>
+
+		<Select.Root type="single" name="themeMode" bind:value={themeMode}>
+			<Select.Trigger class="w-fit">
+				{themeModeTriggerContent}
+			</Select.Trigger>
+			<Select.Content>
+				<Select.Group>
+					<Select.GroupHeading>{m.settings_general_theme_mode()}</Select.GroupHeading>
+					{#each themeModes as mode}
+						<Select.Item
+							onclick={() => {
+								themeMode = mode.value
+								appConfig.setTheme({
+									...$appConfig.theme,
+									lightMode: mode.value
+								})
+							}}
+							value={mode.value}
+							label={mode.label()}>{mode.label()}</Select.Item
+						>
+					{/each}
+				</Select.Group>
+			</Select.Content>
+		</Select.Root>
+	</li>
+	<li>
 		<span>{m.settings_general_loading_animation()}</span>
 
 		<Select.Root type="single" name="loadingAnimation" bind:value={loadingAnimation}>
@@ -114,7 +154,7 @@
 			</Select.Trigger>
 			<Select.Content>
 				<Select.Group>
-					<Select.GroupHeading>Loading Animation</Select.GroupHeading>
+					<Select.GroupHeading>{m.settings_general_loading_animation()}</Select.GroupHeading>
 					{#each loadingAnimations as anim}
 						<Select.Item
 							onclick={() => {

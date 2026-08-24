@@ -39,7 +39,34 @@
 		packageJson,
 		showBtn,
 		loading,
-		imageDialogOpen = $bindable(false)
+		imageDialogOpen = $bindable(false),
+		labels = {
+			upgrade: "Upgrade",
+			uninstall: "Uninstall",
+			install: "Install",
+			version: "Version",
+			downloads: "Downloads",
+			size: "Size",
+			publishedAt: "Published At",
+			securityPrivacy: "Security and Privacy",
+			description: "Description",
+			commands: "Commands",
+			publisherProfile: "Publisher Profile",
+			author: "Author",
+			notAvailable: "N/A",
+			contributors: "Contributors",
+			readme: "README",
+			provenance: {
+				builtSignedOn: "Built and signed on",
+				viewBuildSummary: "View build summary",
+				sourceCommit: "Source Commit",
+				buildFile: "Build File",
+				publicLedger: "Public Ledger",
+				transparencyLog: "Transparency log entry",
+				mirror: "Mirror",
+				mirrorRepo: "Mirror Repo"
+			}
+		}
 	}: {
 		extPublish: ExtPublish
 		// extPublish: GetExtensionsLatestPublishByIdentifierResponse
@@ -71,6 +98,33 @@
 			upgrade: boolean
 		}
 		imageDialogOpen: boolean
+		labels?: {
+			upgrade: string
+			uninstall: string
+			install: string
+			version: string
+			downloads: string
+			size: string
+			publishedAt: string
+			securityPrivacy: string
+			description: string
+			commands: string
+			publisherProfile: string
+			author: string
+			notAvailable: string
+			contributors: string
+			readme: string
+			provenance: {
+				builtSignedOn: string
+				viewBuildSummary: string
+				sourceCommit: string
+				buildFile: string
+				publicLedger: string
+				transparencyLog: string
+				mirror: string
+				mirrorRepo: string
+			}
+		}
 	} = $props()
 
 	const isInstalled = $derived(installedExt !== undefined)
@@ -107,7 +161,7 @@
 		variant="destructive"
 		onclick={onUpgradeSelected}
 	>
-		<span>Upgrade</span>
+		<span>{labels.upgrade}</span>
 		{#if loading.upgrade}
 			{@render spinLoader()}
 		{:else}
@@ -126,7 +180,7 @@
 		variant="destructive"
 		onclick={onUninstallSelected}
 	>
-		<span>Uninstall</span>
+		<span>{labels.uninstall}</span>
 		{#if loading.uninstall}
 			{@render spinLoader()}
 		{:else}
@@ -141,7 +195,7 @@
 		disabled={loading.install}
 		onclick={onInstallSelected}
 	>
-		<span>Install</span>
+		<span>{labels.install}</span>
 		{#if loading.install}
 			{@render spinLoader()}
 		{:else}
@@ -181,18 +235,18 @@
 					{/if}
 				</span>
 				<pre class="text-muted-foreground text-xs">{extPublish.identifier}</pre>
-				<pre class="text-muted-foreground text-xs">Version: {extPublish.version}</pre>
-				<pre class="text-muted-foreground text-xs">Downloads: {ext.downloads}</pre>
-				<pre class="text-muted-foreground text-xs">Size: {prettyBytes(
+				<pre class="text-muted-foreground text-xs">{labels.version}: {extPublish.version}</pre>
+				<pre class="text-muted-foreground text-xs">{labels.downloads}: {ext.downloads}</pre>
+				<pre class="text-muted-foreground text-xs">{labels.size}: {prettyBytes(
 						extPublish.tarball_size
 					)}</pre>
-				<pre class="text-muted-foreground text-xs">Published At: {moment(
+				<pre class="text-muted-foreground text-xs">{labels.publishedAt}: {moment(
 						new Date(extPublish.created_at)
 					).format("YYYY-MM-DD HH:mm")}</pre>
 			</div>
 		</div>
 		{#if !isInTauri}
-			<Button onclick={onInstallSelected}>Install</Button>
+			<Button onclick={onInstallSelected}>{labels.install}</Button>
 		{/if}
 	</div>
 	<div class="mt-2 flex flex-col gap-2 md:flex-row">
@@ -226,6 +280,7 @@
 			commit={metadata.git.commit}
 			rekorLogIndex={metadata.rekorLogIndex}
 			workflowPath={metadata.git.workflowPath}
+			labels={labels.provenance}
 		/>
 	{/if}
 	{#if demoImages.length > 0}
@@ -256,17 +311,17 @@
 	{/if}
 
 	<Separator class="my-3" />
-	<h2 class="text-lg font-bold">Security and Privacy</h2>
+	<h2 class="text-lg font-bold">{labels.securityPrivacy}</h2>
 	<PermissionInspector permissions={manifest.permissions} />
 	<Separator class="my-3" />
-	<h2 class="text-lg font-bold">Description</h2>
+	<h2 class="text-lg font-bold">{labels.description}</h2>
 
 	<div class="text-sm">{manifest?.shortDescription}</div>
 	<div class="text-sm">{manifest?.longDescription}</div>
 	<Separator class="my-3" />
 	<div class="grid grid-cols-3 gap-4">
 		<div class="col-span-2">
-			<h2 class="text-lg font-bold">Commands</h2>
+			<h2 class="text-lg font-bold">{labels.commands}</h2>
 			<ul>
 				{#if manifest}
 					{#each [...(manifest.customUiCmds ?? []), ...(manifest.templateUiCmds ?? []), ...(manifest.headlessCmds ?? [])] as cmd}
@@ -288,7 +343,7 @@
 			</ul>
 		</div>
 		<div>
-			<h2 class="text-lg font-bold">Publisher Profile</h2>
+			<h2 class="text-lg font-bold">{labels.publisherProfile}</h2>
 			{#if !isInTauri && author}
 				<ul class="list-disc pl-5">
 					<li>
@@ -300,16 +355,16 @@
 			{:else}
 				<TauriLink href={`https://kunkun.sh/user/${ext.author_id}`}>{ext.author_id}</TauriLink>
 			{/if}
-			<h2 class="text-lg font-bold">Author</h2>
+			<h2 class="text-lg font-bold">{labels.author}</h2>
 			{#if packageJson?.author}
 				<ul class="list-disc pl-5">
 					<li>{@render person(packageJson?.author)}</li>
 				</ul>
 			{:else}
-				<span>N/A</span>
+				<span>{labels.notAvailable}</span>
 			{/if}
 			<br />
-			<h2 class="text-lg font-bold">Contributors</h2>
+			<h2 class="text-lg font-bold">{labels.contributors}</h2>
 			<ul class="list-disc pl-5">
 				{#each packageJson?.contributors ?? [] as contributor}
 					<li>{@render person(contributor)}</li>
@@ -318,7 +373,7 @@
 		</div>
 	</div>
 	<Separator class="my-3" />
-	<h2 class="text-lg font-bold">README</h2>
+	<h2 class="text-lg font-bold">{labels.readme}</h2>
 	{#if extPublish?.readme}
 		<Markdown markdown={extPublish.readme} class="bg-secondary max-w-full rounded-md p-4" />
 	{/if}

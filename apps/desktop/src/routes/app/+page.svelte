@@ -220,13 +220,14 @@
 		{/snippet}
 	</CustomCommandInput>
 	<Command.List class="max-h-screen grow">
-		<Command.Empty data-tauri-drag-region>No results found.</Command.Empty>
+		<Command.Empty data-tauri-drag-region>{m.common_no_results_found()}</Command.Empty>
 		{#if $devSearchExtCmds.length > 0}
 			<ExtCmds
 				heading={m.command_group_heading_dev_ext()}
 				extCmds={$devSearchExtCmds}
 				hmr={$appConfig.hmr}
 				isDev={true}
+				labels={{ dev: m.common_dev(), hmr: m.common_hmr() }}
 				onExtCmdSelect={commandLaunchers.onExtCmdSelect}
 			/>
 		{/if}
@@ -236,21 +237,28 @@
 				extCmds={$storeSearchExtCmds}
 				hmr={false}
 				isDev={false}
+				labels={{ dev: m.common_dev(), hmr: m.common_hmr() }}
 				onExtCmdSelect={commandLaunchers.onExtCmdSelect}
 			/>
 		{/if}
 		{#if $builtinCmds.length > 0}
-			<BuiltinCmds builtinCmds={$builtinCmds} />
+			<BuiltinCmds builtinCmds={$builtinCmds} heading={m.command_group_heading_builtin()} />
 		{/if}
 		{#if $systemCommandsFiltered.length > 0}
-			<SystemCmds systemCommands={$systemCommandsFiltered} />
+			<SystemCmds
+				systemCommands={$systemCommandsFiltered}
+				heading={m.command_group_heading_system()}
+			/>
 		{/if}
 		{#if $appsFiltered.length > 0}
-			<AppsCmds apps={$appsFiltered} />
+			<AppsCmds apps={$appsFiltered} heading={m.command_group_heading_apps()} />
 		{/if}
 
 		{#if $quickLinksFiltered.length > 0}
-			<QuickLinks quickLinks={$quickLinksFiltered} />
+			<QuickLinks
+				quickLinks={$quickLinksFiltered}
+				heading={m.command_group_heading_quick_links()}
+			/>
 		{/if}
 	</Command.List>
 	<GlobalCommandPaletteFooter />

@@ -316,13 +316,6 @@ pub fn run() {
                 .start_monitor(app.app_handle().clone())?;
             setup::clipboard::setup_clipboard_update_handler(app.app_handle(), clipboard_update_rx);
 
-            #[cfg(debug_assertions)] // only include this code on debug builds
-            {
-                let window = app.get_webview_window("main").unwrap();
-                window.open_devtools();
-                // window.close_devtools();
-            }
-
             let main_window = app.get_webview_window("main").unwrap();
             std::thread::spawn(move || {
                 // this is a backup plan, if frontend is not properly loaded, show() will not be called, then we need to call it manually from rust after a long delay

@@ -1,4 +1,5 @@
 import { i18n } from "@/i18n"
+import * as m from "@/paraglide/messages"
 import { appConfig, appState, auth, extensions } from "@/stores"
 import { checkUpdateAndInstall } from "@/utils/updater"
 import { setTransparentTitlebar } from "@kksh/api/commands"
@@ -20,19 +21,19 @@ import { v4 as uuidv4 } from "uuid"
 
 export const rawBuiltinCmds: BuiltinCmd[] = [
 	{
-		name: "Store",
+		name: m.app_command_store(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "streamline:store-2-solid"
 		},
-		description: "Go to Extension Store",
+		description: m.app_command_store_description(),
 		function: async () => {
 			appState.clearSearchTerm()
 			goto(i18n.resolveRoute("/app/extension/store"))
 		}
 	},
 	{
-		name: "Sign In",
+		name: m.app_command_sign_in(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "mdi:login-variant"
@@ -43,7 +44,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Sign Out",
+		name: m.app_command_sign_out(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "mdi:logout-variant"
@@ -52,12 +53,12 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		function: async () => {
 			auth
 				.signOut()
-				.then(() => toast.success("Signed out"))
-				.catch((err) => toast.error("Failed to sign out: ", { description: err.message }))
+				.then(() => toast.success(m.app_command_signed_out()))
+				.catch((err) => toast.error(m.app_command_sign_out_failed(), { description: err.message }))
 		}
 	},
 	{
-		name: "Show Draggable Area",
+		name: m.app_command_show_drag_area(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "mingcute:move-fill"
@@ -77,7 +78,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Splashscreen (Dev)",
+		name: m.app_command_splashscreen_dev(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:skeleton"
@@ -94,7 +95,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "File Transfer",
+		name: m.app_command_file_transfer(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "clarity:file-share-solid"
@@ -106,7 +107,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Add Dev Extension",
+		name: m.app_command_add_dev_extension(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "lineicons:dev",
@@ -119,18 +120,18 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Kunkun Version",
+		name: m.app_command_version(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "stash:version-solid"
 		},
 		description: "",
 		function: async () => {
-			toast.success(`Kunkun Version: ${await getVersion()}`)
+			toast.success(m.app_command_version_value({ version: await getVersion() }))
 		}
 	},
 	{
-		name: "Set Dev Extension Path",
+		name: m.app_command_set_dev_extension_path(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "lineicons:dev",
@@ -144,7 +145,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Extension Window Troubleshooter",
+		name: m.app_command_extension_window_troubleshooter(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:window-outline"
@@ -156,13 +157,13 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 			console.log(winLabel)
 			new WebviewWindow(winLabel, {
 				url: "/app/troubleshooters/extension-window",
-				title: "Extension Window Troubleshooter"
+				title: m.troubleshooters_extension_window_title_label()
 			})
 		},
 		keywords: ["extension", "window", "troubleshooter"]
 	},
 	{
-		name: "Help (Install Deno)",
+		name: m.app_command_help_deno(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "simple-icons:deno"
@@ -175,7 +176,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		keywords: ["help", "deno", "install"]
 	},
 	{
-		name: "Help (Install ffmpeg)",
+		name: m.app_command_help_ffmpeg(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "logos:ffmpeg-icon"
@@ -188,7 +189,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		keywords: ["help", "ffmpeg", "install"]
 	},
 	{
-		name: "Help (Install homebrew)",
+		name: m.app_command_help_homebrew(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "devicon:homebrew"
@@ -201,7 +202,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		keywords: ["help", "brew", "install", "homebrew"]
 	},
 	{
-		name: "On Boarding (Dev Only)",
+		name: m.app_command_onboarding_dev(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "fluent-mdl2:onboarding"
@@ -217,7 +218,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Extension Permission Inspector",
+		name: m.app_command_permission_inspector(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "hugeicons:inspect-code"
@@ -230,7 +231,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		keywords: ["extension"]
 	},
 	{
-		name: "Extension Loading Troubleshooter",
+		name: m.app_command_extension_loading(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:troubleshoot"
@@ -243,7 +244,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		keywords: ["extension", "troubleshooter"]
 	},
 	{
-		name: "ORM Troubleshooter",
+		name: m.app_command_orm(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:database"
@@ -260,30 +261,30 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		keywords: ["extension", "troubleshooter", "database", "orm"]
 	},
 	{
-		name: "Create Quicklink",
+		name: m.app_command_create_quicklink(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:link"
 		},
-		description: "Create a Quicklink",
+		description: m.app_command_create_quicklink_description(),
 		function: async () => {
 			appState.clearSearchTerm()
 			goto(i18n.resolveRoute("/app/extension/create-quick-link"))
 		}
 	},
 	{
-		name: "Key Displayer",
+		name: m.app_command_key_displayer(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:keyboard"
 		},
-		description: "Display the current key",
+		description: m.app_command_key_displayer_description(),
 		function: async () => {
 			appState.clearSearchTerm()
 			const label = `main:extension:key-displayer-${uuidv4()}`
 			new WebviewWindow(label, {
 				url: "/app/extension/key-displayer",
-				title: "Key Displayer",
+				title: m.app_command_key_displayer(),
 				decorations: false,
 				hiddenTitle: true,
 				visible: false,
@@ -295,59 +296,59 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Settings",
+		name: m.app_command_settings(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "solar:settings-linear"
 		},
-		description: "Open Settings",
+		description: m.app_command_settings_description(),
 		function: async () => {
 			goto(i18n.resolveRoute("/app/settings"))
 			appState.clearSearchTerm()
 		}
 	},
 	{
-		name: "Check Update",
+		name: m.app_command_check_update(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:update"
 		},
-		description: "Check for updates",
+		description: m.app_command_check_update_description(),
 		function: async () => {
 			checkUpdateAndInstall()
 			appState.clearSearchTerm()
 		}
 	},
 	{
-		name: "Check Beta Update",
+		name: m.app_command_check_beta_update(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:update"
 		},
-		description: "Check for Beta updates",
+		description: m.app_command_check_beta_update_description(),
 		function: async () => {
 			checkUpdateAndInstall({ beta: true })
 			appState.clearSearchTerm()
 		}
 	},
 	{
-		name: "Reload",
+		name: m.app_command_reload(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "tabler:reload"
 		},
-		description: "Reload this page",
+		description: m.app_command_reload_description(),
 		function: async () => {
 			location.reload()
 		}
 	},
 	{
-		name: "Reload Extensions",
+		name: m.app_command_reload_extensions(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "tabler:reload"
 		},
-		description: "Reload Extensions",
+		description: m.app_command_reload_extensions(),
 		function: async () => {
 			extensions.init().then(() => {
 				appState.clearSearchTerm()
@@ -355,37 +356,37 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Dance",
+		name: m.app_command_dance(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "mdi:dance-pole"
 		},
-		description: "Dance",
+		description: m.app_command_dance(),
 		function: async () => {
 			goto(i18n.resolveRoute("/app/dance"))
 		}
 	},
 	{
-		name: "Quit Kunkun",
+		name: m.app_command_quit(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "emojione:cross-mark-button"
 		},
-		description: "Quit Kunkun",
+		description: m.app_command_quit(),
 		function: async () => {
 			exit(0)
 		}
 	},
 	{
-		name: "Toggle Dev Extension HMR",
+		name: m.app_command_toggle_hmr(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "ri:toggle-line"
 		},
-		description: "Load dev extensions from their dev server URLs",
+		description: m.app_command_toggle_hmr_description(),
 		function: async () => {
 			appConfig.update((config) => {
-				toast.success(`Dev Extension HMR toggled to: ${!config.hmr}`)
+				toast.success(m.app_command_hmr_toggled({ enabled: String(!config.hmr) }))
 				return {
 					...config,
 					hmr: !config.hmr
@@ -395,33 +396,33 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Clipboard History",
+		name: m.app_command_clipboard_history(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "mdi:clipboard-outline"
 		},
-		description: "Clipboard History",
+		description: m.app_command_clipboard_history(),
 		function: async () => {
 			appState.clearSearchTerm()
 			goto(i18n.resolveRoute("/app/extension/clipboard"))
 		}
 	},
 	{
-		name: "Pin Current Screenshot",
+		name: m.app_command_pin_screenshot(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:screenshot-monitor-outline"
 		},
-		description: "Pin the current screenshot",
+		description: m.app_command_pin_screenshot(),
 		function: async () => {
 			appState.clearSearchTerm()
 			if (!(await clipboard.hasImage())) {
-				toast.error("No screenshot in clipboard")
+				toast.error(m.app_command_no_screenshot())
 				return
 			}
 			const window = new WebviewWindow(`main:pinned-screenshot-${uuidv4()}`, {
 				url: "/app/extension/pin-screenshot",
-				title: "Pinned Screenshot",
+				title: m.app_command_pinned_screenshot(),
 				hiddenTitle: true,
 				titleBarStyle: "transparent",
 				decorations: false,
@@ -433,12 +434,12 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "MDNS Debugger",
+		name: m.app_command_mdns_debugger(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "material-symbols:wifi-find"
 		},
-		description: "MDNS Debugger",
+		description: m.app_command_mdns_debugger(),
 		function: async () => {
 			goto(i18n.resolveRoute("/app/troubleshooters/mdns-debugger"))
 		},
@@ -448,15 +449,15 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		keywords: ["mdns", "debugger", "troubleshooter"]
 	},
 	{
-		name: "Toggle Hide On Blur",
+		name: m.app_command_toggle_hide_on_blur(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "ri:toggle-line"
 		},
-		description: "Toggle Hide On Blur",
+		description: m.app_command_toggle_hide_on_blur(),
 		function: async () => {
 			appConfig.update((config) => {
-				toast.success(`"Hide on Blur" toggled to: ${!config.hideOnBlur}`)
+				toast.success(m.app_command_hide_on_blur_toggled({ enabled: String(!config.hideOnBlur) }))
 				return {
 					...config,
 					hideOnBlur: !config.hideOnBlur
@@ -466,26 +467,28 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		}
 	},
 	{
-		name: "Toggle Developer Mode",
+		name: m.app_command_toggle_developer_mode(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "hugeicons:developer"
 		},
-		description: "Toggle Developer Mode",
+		description: m.app_command_toggle_developer_mode(),
 		function: async () => {
 			appConfig.update((config) => {
-				toast.success(`Developer Mode toggled to: ${!config.developerMode}`)
+				toast.success(
+					m.app_command_developer_mode_toggled({ enabled: String(!config.developerMode) })
+				)
 				return { ...config, developerMode: !config.developerMode }
 			})
 		}
 	},
 	{
-		name: "Open App Data Dir",
+		name: m.app_command_open_app_data_dir(),
 		icon: {
 			type: IconEnum.Iconify,
 			value: "mdi:folder-open"
 		},
-		description: "Open App Data Dir",
+		description: m.app_command_open_app_data_dir(),
 		function: async () => {
 			console.log(await appDataDir())
 			open(await appDataDir())

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { cn } from "@/utils"
 	import type { ExtData } from "@kksh/api/models"
 	import { db } from "@kksh/drizzle"
@@ -19,7 +20,7 @@
 		const timeString = date.toLocaleTimeString("en-US", options)
 
 		if (isToday) {
-			return `Today at ${timeString}`
+			return m.clipboard_today_at({ time: timeString })
 		} else {
 			const dateOptions: Intl.DateTimeFormatOptions = {
 				month: "short",
@@ -27,7 +28,7 @@
 				year: "numeric"
 			} as const
 			const dateString = date.toLocaleDateString("en-US", dateOptions)
-			return `${dateString} at ${timeString}`
+			return m.clipboard_at({ date: dateString, time: timeString })
 		}
 	}
 
@@ -71,28 +72,28 @@
 				{@html DOMPurify.sanitize(txtData)}
 			</div>
 		{:else}
-			<div class="text-sm">No preview available</div>
+			<div class="text-sm">{m.clipboard_no_preview_short()}</div>
 		{/if}
 		<!-- </div> -->
 	</Resizable.Pane>
 	<Resizable.Handle withHandle />
 	<Resizable.Pane defaultSize={50} class="space-y-1 px-4 pt-2">
-		<h2 class="font-mono font-bold">Information</h2>
+		<h2 class="font-mono font-bold">{m.clipboard_information()}</h2>
 		{#if createTime}
-			{@render row("Copied At", formatDate(createTime))}
+			{@render row(m.clipboard_copied_at(), formatDate(createTime))}
 		{/if}
 		<Separator />
-		{@render row("Content Type", highlighted.dataType || "")}
+		{@render row(m.clipboard_content_type(), highlighted.dataType || "")}
 		{#if highlighted.dataType === "Image"}
 			{#if imgRef}
 				<Separator />
-				{@render row("Dimension", `${imgRef.naturalWidth}x${imgRef.naturalHeight}`)}
+				{@render row(m.clipboard_dimension(), `${imgRef.naturalWidth}x${imgRef.naturalHeight}`)}
 			{/if}
 		{:else}
 			<Separator />
-			{@render row("Character Count", txtData.length.toString())}
+			{@render row(m.clipboard_character_count(), txtData.length.toString())}
 			<Separator />
-			{@render row("Word Count", txtData.split(/\s+/).length.toString())}
+			{@render row(m.clipboard_word_count(), txtData.split(/\s+/).length.toString())}
 		{/if}
 	</Resizable.Pane>
 </Resizable.PaneGroup>

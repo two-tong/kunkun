@@ -21,7 +21,7 @@
 				"title": "Kunkun",
 				"width": 800,
 				"label": "main",
-				"visible": false,
+				"visible": true,
 				"height": 600,
 				"decorations": true,
 				"center": true

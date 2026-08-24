@@ -19,13 +19,15 @@
 		heading,
 		isDev,
 		hmr,
-		onExtCmdSelect
+		onExtCmdSelect,
+		labels = { dev: "Dev", hmr: "HMR" }
 	}: {
 		extCmds: Cmd[]
 		heading: string
 		isDev: boolean
 		hmr: boolean
 		onExtCmdSelect: OnExtCmdSelect
+		labels?: { dev: string; hmr: string }
 	} = $props()
 </script>
 
@@ -43,10 +45,10 @@
 		</span>
 		<span class="flex gap-1">
 			{#if isDev}
-				<Badge class="scale-75 rounded-sm bg-green-500 px-1">Dev</Badge>
+				<Badge class="scale-75 rounded-sm bg-green-500 px-1">{labels.dev}</Badge>
 			{/if}
 			{#if hmr}
-				<Badge class="scale-75 rounded-sm px-1">HMR</Badge>
+				<Badge class="scale-75 rounded-sm px-1">{labels.hmr}</Badge>
 			{/if}
 		</span>
 	</Command.Item>

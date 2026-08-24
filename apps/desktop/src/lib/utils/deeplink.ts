@@ -1,4 +1,5 @@
 import { i18n } from "@/i18n"
+import * as m from "@/paraglide/messages"
 import { emitRefreshDevExt } from "@/utils/tauri-events"
 import {
 	DEEP_LINK_PATH_AUTH_CONFIRM,
@@ -43,7 +44,7 @@ function openMainWindow() {
 		.catch((err) => {
 			console.error(err)
 			error(`Failed to show window upon deep link: ${err.message}`)
-			toast.error("Failed to show window upon deep link", {
+			toast.error(m.deeplink_show_window_failed(), {
 				description: err.message
 			})
 		})
@@ -69,7 +70,7 @@ export async function handleKunkunProtocol(parsedUrl: URL) {
 		goto(i18n.resolveRoute(`/app/auth/confirm?${parsedUrl.searchParams.toString()}`))
 	} else {
 		console.error("Invalid path:", pathname)
-		toast.error("Invalid path", {
+		toast.error(m.deeplink_invalid_path(), {
 			description: parsedUrl.href
 		})
 	}
@@ -88,7 +89,7 @@ export async function handleFileProtocol(parsedUrl: URL) {
 			break
 		default:
 			console.error("Unknown file extension:", fileExt)
-			toast.error("Unknown file extension", {
+			toast.error(m.deeplink_unknown_file_extension(), {
 				description: fileExt
 			})
 			break
@@ -108,7 +109,7 @@ export async function handleDeepLink(url: string) {
 			return handleFileProtocol(parsedUrl)
 		default:
 			console.error("Invalid Protocol:", parsedUrl.protocol)
-			toast.error("Invalid Protocol", {
+			toast.error(m.deeplink_invalid_protocol(), {
 				description: parsedUrl.protocol
 			})
 			break

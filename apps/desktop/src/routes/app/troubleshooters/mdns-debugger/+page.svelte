@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { goBackOnEscape } from "@/utils/key.js"
 	import { goBack } from "@/utils/route"
 	import { getPeers } from "@kksh/api/commands"
@@ -22,6 +23,6 @@
 
 <div class="h-10" data-tauri-drag-region></div>
 <main class="container">
-	<Button onclick={refreshPeers}>Refresh mDNS Peers</Button>
+	<Button onclick={refreshPeers}>{m.troubleshooters_mdns_debugger_refresh_peers()}</Button>
 	<pre>{JSON.stringify(peers, null, 2)}</pre>
 </main>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { i18n } from "@/i18n.js"
+	import * as m from "@/paraglide/messages"
 	import { appState } from "@/stores/appState.js"
 	import { keys } from "@/stores/keys"
 	import { winExtMap } from "@/stores/winExtMap.js"
@@ -108,8 +109,8 @@
 				await clearViewContent("list")
 				const parsedListViewRes = v.safeParse(ListSchema.List, _view)
 				if (!parsedListViewRes.success) {
-					toast.error("Invalid List View", {
-						description: "See console for details"
+					toast.error(m.extension_invalid_list_view(), {
+						description: m.common_see_console()
 					})
 					console.error("Fail to parse List View", v.flatten(parsedListViewRes.issues))
 					return
@@ -201,7 +202,7 @@
 				await tick()
 				markdownViewContent = v.parse(MarkdownSchema, _view)
 			} else {
-				toast.error(`Unsupported view type: ${_view.nodeName}`)
+				toast.error(m.extension_unsupported_view_type({ type: _view.nodeName }))
 			}
 		},
 		async showLoadingBar(loading: boolean) {
@@ -389,6 +390,11 @@
 		{pbar}
 		{listViewContent}
 		{loading}
+		labels={{
+			noResults: m.common_no_results_found(),
+			noData: m.common_no_data_found(),
+			loading: m.common_loading()
+		}}
 		onGoBack={goBack}
 		onListScrolledToBottom={() => {
 			workerAPI?.onListScrolledToBottom()
@@ -420,6 +426,11 @@
 			<GlobalCommandPaletteFooter
 				bind:actionPanelOpen
 				actionPanel={$appState.actionPanel}
+				actionPanelLabels={{
+					actions: m.common_actions(),
+					selectAction: m.common_select_action(),
+					noActionFound: m.common_no_action_found()
+				}}
 				defaultAction={$appState.defaultAction ?? undefined}
 				{onActionPanelBlur}
 				onDefaultActionSelected={() => {
@@ -436,6 +447,20 @@
 	<Templates.FormView
 		{formViewContent}
 		{pbar}
+		labels={{
+			select: m.form_select(),
+			submit: m.common_submit(),
+			arrayUnsupported: m.form_array_unsupported(),
+			nestedUnsupported: m.form_nested_unsupported(),
+			fieldUnsupported: m.form_field_unsupported(),
+			date: {
+				pickDate: m.date_pick(),
+				today: m.date_today(),
+				tomorrow: m.date_tomorrow(),
+				inDays: (count: number) => m.date_in_days({ count }),
+				inWeek: m.date_in_days({ count: 7 })
+			}
+		}}
 		onGoBack={goBack}
 		onSubmit={(formData: Record<string, string | number | boolean>) => {
 			console.log("Submit formData", formData)

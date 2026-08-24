@@ -1,4 +1,5 @@
 import { getExtensionsFolder } from "@/constants"
+import * as m from "@/paraglide/messages"
 import type { SearchPath } from "@kksh/api/models"
 import { updateTheme, type ThemeConfig } from "@kksh/svelte5"
 import { LoadingAnimation, PersistedAppConfig, type AppConfigState } from "@kksh/types"
@@ -6,6 +7,8 @@ import { debug, error, info } from "@tauri-apps/plugin-log"
 import * as os from "@tauri-apps/plugin-os"
 import { load } from "@tauri-apps/plugin-store"
 import { Store } from "@tauri-store/svelte"
+import { browser } from "$app/environment"
+import { resetMode, setMode } from "mode-watcher"
 import { toast } from "svelte-sonner"
 import { get, writable } from "svelte/store"
 import * as v from "valibot"
@@ -13,7 +16,7 @@ import * as v from "valibot"
 export const defaultAppConfig: AppConfigState = {
 	isInitialized: false,
 	platform: "macos",
-	language: "en",
+	language: "zh",
 	theme: {
 		theme: "zinc",
 		radius: 0.5,
@@ -35,6 +38,18 @@ export const defaultAppConfig: AppConfigState = {
 
 export const appConfigLoaded = writable(false)
 
+function applyTheme(theme: ThemeConfig) {
+	updateTheme(theme)
+	if (!browser) {
+		return
+	}
+	if (theme.lightMode === "auto") {
+		resetMode()
+		return
+	}
+	setMode(theme.lightMode)
+}
+
 interface AppConfigAPI {
 	init: () => Promise<void>
 	get: () => AppConfigState
@@ -52,14 +67,18 @@ class AppConfigStore extends Store<AppConfigState> implements AppConfigAPI {
 		super("app-config", defaultAppConfig, {
 			saveOnChange: true
 		})
-		this.start().catch((err) => {
-			error("Failed to start app config store", err)
-			toast.error("Failed to start app config store", { description: err.message })
-		})
+		if (browser) {
+			this.start().catch((err) => {
+				error("Failed to start app config store", err)
+				toast.error(m.config_store_start_failed(), { description: err.message })
+			})
+		}
 	}
 	async init() {
 		debug("Initializing app config")
 		const extensionsInstallDir = await getExtensionsFolder()
+		const config = this.get()
+		applyTheme(config.theme as ThemeConfig)
 		this.update((config) => ({
 			...config,
 			isInitialized: true,
@@ -73,6 +92,7 @@ class AppConfigStore extends Store<AppConfigState> implements AppConfigAPI {
 		return get(this)
 	}
 	setTheme(theme: ThemeConfig) {
+		applyTheme(theme)
 		this.update((config) => ({ ...config, theme }))
 	}
 	setDevExtensionPath(devExtensionPath: string | null) {

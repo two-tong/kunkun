@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as m from "@/paraglide/messages"
 	import { quickLinks } from "@/stores/quick-links"
 	import { goBackOnEscape } from "@/utils/key"
 	import { goBack } from "@/utils/route"
@@ -35,18 +36,18 @@
 			quickLinks
 				.createQuickLink(name, link, icon)
 				.then(() => {
-					toast.success("Quicklink created successfully")
+					toast.success(m.quicklink_created())
 					goBack()
 				})
 				.catch((err) => {
-					toast.error("Failed to create quicklink", { description: err })
+					toast.error(m.quicklink_fail_create(), { description: err })
 				})
 		}
 	})
 
 	const { form: formData, enhance, errors } = form
 	const placeholders = {
-		name: "Quick Link Name",
+		name: m.quicklink_display_name(),
 		link: "https://google.com/search?q={argument}"
 	}
 
@@ -73,33 +74,43 @@
 </Button>
 <div class="h-12" data-tauri-drag-region></div>
 <div class="container">
-	<h1 class="text-2xl font-bold">Create Quick Link</h1>
+	<h1 class="text-2xl font-bold">{m.quicklink_create_title()}</h1>
 	<form method="POST" use:enhance>
 		<Form.Field {form} name="name">
 			<Form.Control>
 				{#snippet children({ props })}
-					<Form.Label>Name</Form.Label>
+					<Form.Label>{m.quicklink_name()}</Form.Label>
 					<Input {...props} bind:value={$formData.name} placeholder={placeholders.name} />
 				{/snippet}
 			</Form.Control>
-			<Form.Description>Quick Link Display Name</Form.Description>
+			<Form.Description>{m.quicklink_display_name()}</Form.Description>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="link">
 			<Form.Control>
 				{#snippet children({ props })}
-					<Form.Label>Link</Form.Label>
+					<Form.Label>{m.quicklink_link()}</Form.Label>
 					<Input {...props} bind:value={$formData.link} placeholder={placeholders.link} />
 				{/snippet}
 			</Form.Control>
-			<Form.Description>Quick Link URL</Form.Description>
+			<Form.Description>{m.quicklink_url()}</Form.Description>
 			<Form.FieldErrors />
 		</Form.Field>
-		<IconSelector class="border" bind:icon />
+		<IconSelector
+			class="border"
+			bind:icon
+			labels={{
+				type: m.icon_type(),
+				value: m.icon_value(),
+				pickName: m.icon_pick_name(),
+				invertColor: m.icon_invert_color(),
+				preview: m.icon_preview()
+			}}
+		/>
 		<input name="iconType" hidden type="text" bind:value={$formData.iconType} />
 		<input name="iconValue" hidden type="text" bind:value={$formData.iconValue} />
 		<input name="invertIcon" hidden type="text" bind:value={$formData.invertIcon} />
-		<Form.Button class="my-1">Submit</Form.Button>
+		<Form.Button class="my-1">{m.common_submit()}</Form.Button>
 	</form>
 </div>
 {#if dev}
