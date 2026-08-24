@@ -1,0 +1,52 @@
+{
+	"$schema": "https://schema.kunkun.sh",
+	"name": "codec-toolbox",
+	"version": "0.0.1",
+	"license": "MIT",
+	"type": "module",
+	"kunkun": {
+		"name": "编码与字符串工具箱",
+		"shortDescription": "常用编码、解码、字符串处理、格式化和哈希工具",
+		"longDescription": "从剪贴板读取文本，快速生成 Base64、Base64URL、URL、HTML、Unicode、Hex、JSON、JWT、字符串处理和哈希结果，并可一键复制。",
+		"identifier": "codec-toolbox",
+		"permissions": [
+			"clipboard:read-text",
+			"clipboard:write-text"
+		],
+		"demoImages": [],
+		"icon": {
+			"type": "iconify",
+			"value": "material-symbols:code-blocks-outline"
+		},
+		"customUiCmds": [],
+		"templateUiCmds": [
+			{
+				"name": "编码与字符串工具箱",
+				"main": "dist/index.js",
+				"cmds": []
+			}
+		]
+	},
+	"scripts": {
+		"dev": "bun build.ts dev",
+		"build": "bun build.ts",
+		"check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@kksh/api": "workspace:*",
+		"he": "^1.2.0",
+		"js-md5": "^0.9.2"
+	},
+	"devDependencies": {
+		"@types/bun": "1.2.8",
+		"@types/he": "^1.2.3"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"files": [
+		"dist",
+		".gitignore",
+		"README.md"
+	]
+}
