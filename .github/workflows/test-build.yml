@@ -1,11 +1,6 @@
 name: "Desktop Test build"
 
 on:
-  push:
-    branches:
-      - "test-build"
-    tags:
-      - "v*"
   workflow_dispatch:
 
 jobs:

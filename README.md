@@ -1,5 +1,27 @@
 ![kunkun](https://socialify.git.ci/kunkunsh/kunkun/image?description=1&forks=1&issues=1&logo=https%3A%2F%2Fstorage.huakun.tech%2F2024%2F9%2F12%2F4MjHiKK.png&name=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Auto)
 
+## 中文说明
+
+这个仓库是 [kunkunsh/kunkun](https://github.com/kunkunsh/kunkun) 的个人 fork，用于维护中文本地化和本地运行修复。
+
+本 fork 当前主要改动：
+
+- 将桌面端默认语言改为中文，并补充大量界面文案汉化。
+- 在通用设置中加入“外观模式”，支持浅色、深色和自动跟随系统外观。
+- 修复开发环境启动时的若干问题，包括缺失加载动画数据、SSR 下配置 store 初始化、macOS 应用 plist 解析崩溃等。
+- 关闭上游发布类 GitHub Actions 的自动触发，仅保留手动运行，避免个人 fork 误触发 JSR/NPM/桌面发布流程。
+
+本仓库不是上游官方发布源。如需官方版本、文档和正式下载，请以 [Kunkun 官方仓库](https://github.com/kunkunsh/kunkun) 与 [官方文档](https://docs.kunkun.sh/) 为准。
+
+本地开发运行：
+
+```bash
+pnpm install
+pnpm --filter @kksh/desktop tauri dev
+```
+
+> 注：这个项目是 Tauri 桌面应用，浏览器里的 Vite 地址主要供 Tauri WebView 使用，不等同于完整应用入口。
+
 > [!WARNING]
 > 🚧 Work in Progress 🚧
 > This project is still in its early stages.

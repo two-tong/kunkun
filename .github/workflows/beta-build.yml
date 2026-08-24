@@ -1,11 +1,6 @@
 name: Build Beta
 
 on:
-  schedule:
-    - cron: "22 22 * * *"
-  pull_request:
-    branches:
-      - develop
   workflow_dispatch:
     inputs:
       updater:

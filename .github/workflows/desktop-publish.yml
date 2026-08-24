@@ -1,9 +1,6 @@
 name: "Desktop App Publish"
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
 
 jobs:
