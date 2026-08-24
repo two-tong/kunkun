@@ -48,7 +48,7 @@
 	"settings_about_check_for_updates": "Проверить на наличие обновлений",
 
 	"settings_set_dev_ext_title": "Настроить путь для dev-расширений",
-	"settings_set_dev_ext_description": "Это место, где будут установлены ваши расширения.",
+	"settings_set_dev_ext_description": "Choose a parent directory for dev extensions. Kunkun will automatically sync extension subfolders that contain package.json.",
 	"settings_set_dev_ext_enter_path": "Введите путь",
 
 	"settings_extensions_title": "Ваши расширения",
@@ -59,7 +59,7 @@
 	"settings_extensions_table_col_uninstall": "Удалить",
 
 	"settings_add_dev_ext_title": "Добавить dev-расширение",
-	"settings_add_dev_ext_description": "В режиме разработчика у вас есть четыре способа установки dev-расширений: из локального tar-архива, из локальной директории, по URL-адресу на tar-архив либо по названию пакета npm.",
+	"settings_add_dev_ext_description": "In developer mode, you can add an extension from a local folder, tarball file, remote tarball URL, or npm package name. You can also set a parent dev extension path and let Kunkun sync extensions inside it automatically.",
 	"settings_add_dev_ext_install_from_ext_folders": "Установить из директори",
 	"settings_add_dev_ext_install_from_ext_files": "Установить из tar-архива",
 	"settings_add_dev_ext_drag_and_drop_strike": "Локальные расширения",
@@ -81,5 +81,10 @@
 	"troubleshooters_extension_loading_title": "Диагностика загрузки расширений",
 	"troubleshooters_extension_loading_table_col_identifier": "Идентификатор",
 	"troubleshooters_extension_loading_table_col_path": "Путь",
-	"troubleshooters_extension_loading_table_col_error": "Ошибка"
+	"troubleshooters_extension_loading_table_col_error": "Ошибка",
+
+	"dev_extension_path_synced": "Synced {count} extensions from the dev extension directory",
+	"dev_extension_path_sync_failed": "Failed to sync dev extension directory",
+	"app_command_open_dev_extension_path": "Open Dev Extension Directory",
+	"app_command_open_dev_extension_path_description": "Open the configured dev extension directory in Finder"
 }

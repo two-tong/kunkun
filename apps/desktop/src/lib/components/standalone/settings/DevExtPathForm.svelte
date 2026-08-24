@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as m from "@/paraglide/messages"
-	import { appConfig } from "@/stores"
+	import { appConfig, extensions } from "@/stores"
 	import Icon from "@iconify/svelte"
 	import { Button, Input } from "@kksh/svelte5"
 	import { open } from "@tauri-apps/plugin-dialog"
@@ -17,6 +17,12 @@
 		if (dir && (await exists(dir))) {
 			devExtPath = dir
 			appConfig.setDevExtensionPath(dir)
+			try {
+				const synced = await extensions.syncDevExtensionsFromPath(dir)
+				toast.success(m.dev_extension_path_synced({ count: String(synced.length) }))
+			} catch (err) {
+				toast.error(m.dev_extension_path_sync_failed(), { description: String(err) })
+			}
 		} else {
 			return toast.error(m.dev_extension_path_invalid())
 		}

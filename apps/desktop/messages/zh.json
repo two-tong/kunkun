@@ -88,7 +88,7 @@
 	"settings_about_check_for_updates": "检查更新",
 
 	"settings_set_dev_ext_title": "设置开发插件安装路径",
-	"settings_set_dev_ext_description": "这是你的开发插件将被安装的地方。",
+	"settings_set_dev_ext_description": "选择一个用于集中存放开发插件的父目录。Kunkun 会自动同步其中包含 package.json 的插件子目录。",
 	"settings_set_dev_ext_enter_path": "输入路径",
 
 	"settings_extensions_title": "你的插件",
@@ -103,7 +103,7 @@
 	"settings_extensions_fail_uninstall": "插件卸载失败",
 
 	"settings_add_dev_ext_title": "添加开发插件",
-	"settings_add_dev_ext_description": "开发者模式下有四种安装插件的方式：本地 tarball 文件、本地文件夹、远程 tarball URL 或 npm 包名。",
+	"settings_add_dev_ext_description": "开发者模式下可以从本地文件夹、tarball 文件、远程 tarball URL 或 npm 包名添加插件。也可以在“设置开发插件路径”里配置一个父目录，让 Kunkun 自动同步里面的插件。",
 	"settings_add_dev_ext_install_from_ext_folders": "从插件文件夹安装",
 	"settings_add_dev_ext_install_from_ext_files": "从插件 tarball 文件安装",
 	"settings_add_dev_ext_drag_and_drop": "拖放",
@@ -343,6 +343,8 @@
 	"dev_extension_tarball_url": "Tarball URL",
 	"dev_extension_file_type_unsupported": "不支持的文件类型：{path}",
 	"dev_extension_from_path_installed": "来自 {path} 的插件安装成功",
+	"dev_extension_path_synced": "已从开发插件目录同步 {count} 个插件",
+	"dev_extension_path_sync_failed": "同步开发插件目录失败",
 
 	"app_command_store": "插件商店",
 	"app_command_store_description": "前往插件商店",
@@ -354,6 +356,8 @@
 	"app_command_add_dev_extension": "添加开发插件",
 	"app_command_version": "鲲鲲版本",
 	"app_command_set_dev_extension_path": "设置开发插件路径",
+	"app_command_open_dev_extension_path": "打开开发插件目录",
+	"app_command_open_dev_extension_path_description": "在 Finder 中打开已配置的开发插件目录",
 	"app_command_extension_window_troubleshooter": "插件窗口故障排除器",
 	"app_command_help": "帮助",
 	"app_command_help_description": "查看可选依赖和安装指引",

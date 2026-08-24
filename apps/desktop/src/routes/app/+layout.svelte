@@ -61,12 +61,11 @@
 			})
 			.catch(error)
 		quickLinks.init()
-		appConfig.init().then(() => {
-			initApp()
-			console.log("appConfig.language", $appConfig.language)
-			setLanguageTag($appConfig.language as AvailableLanguageTag)
-			switchToLanguage($appConfig.language as AvailableLanguageTag)
-		})
+		await appConfig.init()
+		initApp()
+		console.log("appConfig.language", $appConfig.language)
+		setLanguageTag($appConfig.language as AvailableLanguageTag)
+		switchToLanguage($appConfig.language as AvailableLanguageTag)
 		appsLoader.init()
 		if (isInMainWindow()) {
 			unlisteners.push(

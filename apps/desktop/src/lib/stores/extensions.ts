@@ -2,6 +2,7 @@ import type { CustomUiCmd, ExtPackageJsonExtra, HeadlessCmd, TemplateUiCmd } fro
 import { db } from "@kksh/drizzle"
 import * as extAPI from "@kksh/extension"
 import * as path from "@tauri-apps/api/path"
+import { exists, readDir } from "@tauri-apps/plugin-fs"
 import Fuse from "fuse.js"
 import { derived, get, writable, type Writable } from "svelte/store"
 import { appConfig } from "./appConfig"
@@ -20,6 +21,7 @@ function createExtensionsStore(): Writable<ExtPackageJsonExtra[]> & {
 	installFromNpmPackageName: (name: string, installDir: string) => Promise<ExtPackageJsonExtra>
 	findStoreExtensionByIdentifier: (identifier: string) => ExtPackageJsonExtra | undefined
 	registerNewExtensionByPath: (extPath: string) => Promise<ExtPackageJsonExtra>
+	syncDevExtensionsFromPath: (devExtensionPath?: string | null) => Promise<ExtPackageJsonExtra[]>
 	uninstallStoreExtensionByIdentifier: (identifier: string) => Promise<ExtPackageJsonExtra>
 	uninstallDevExtensionByIdentifier: (identifier: string) => Promise<ExtPackageJsonExtra>
 	upgradeStoreExtension: (
@@ -35,9 +37,10 @@ function createExtensionsStore(): Writable<ExtPackageJsonExtra[]> & {
 	 * Load all extensions from the database and disk, all extensions manifest will be stored in the store
 	 * @returns loaded extensions
 	 */
-	function init() {
-		return extAPI.loadAllExtensionsFromDb().then((exts) => {
+	async function init() {
+		return extAPI.loadAllExtensionsFromDb().then(async (exts) => {
 			store.set(exts)
+			await syncDevExtensionsFromPath()
 		})
 	}
 
@@ -95,7 +98,9 @@ function createExtensionsStore(): Writable<ExtPackageJsonExtra[]> & {
 			.then((ext) => {
 				store.update((exts) => {
 					const existingExt = exts.find((e) => e.extPath === ext.extPath)
-					if (existingExt) return exts
+					if (existingExt) {
+						return exts.map((e) => (e.extPath === ext.extPath ? ext : e))
+					}
 					return [...exts, ext]
 				})
 				return ext
@@ -131,6 +136,57 @@ function createExtensionsStore(): Writable<ExtPackageJsonExtra[]> & {
 				console.error(err)
 				return Promise.reject(err)
 			})
+	}
+
+	async function findDevExtensionDirs(devExtensionPath: string): Promise<string[]> {
+		const manifestPath = await path.join(devExtensionPath, "package.json")
+		if (await exists(manifestPath)) {
+			return [devExtensionPath]
+		}
+		const entries = await readDir(devExtensionPath)
+		const dirs: string[] = []
+		for (const entry of entries) {
+			if (!entry.isDirectory) {
+				continue
+			}
+			const extPath = await path.join(devExtensionPath, entry.name)
+			if (await exists(await path.join(extPath, "package.json"))) {
+				dirs.push(extPath)
+			}
+		}
+		return dirs
+	}
+
+	async function loadOrRegisterDevExtensionDir(dirPath: string): Promise<ExtPackageJsonExtra> {
+		try {
+			return await installDevExtensionDir(dirPath)
+		} catch (err) {
+			if (String(err).includes("Extension Already Exists")) {
+				return registerNewExtensionByPath(dirPath)
+			}
+			throw err
+		}
+	}
+
+	async function syncDevExtensionsFromPath(
+		devExtensionPath = get(appConfig).devExtensionPath
+	): Promise<ExtPackageJsonExtra[]> {
+		if (!devExtensionPath) {
+			return []
+		}
+		if (!(await exists(devExtensionPath))) {
+			throw new Error(`Dev extension path does not exist: ${devExtensionPath}`)
+		}
+		const dirs = await findDevExtensionDirs(devExtensionPath)
+		const loaded: ExtPackageJsonExtra[] = []
+		for (const dir of dirs) {
+			try {
+				loaded.push(await loadOrRegisterDevExtensionDir(dir))
+			} catch (err) {
+				console.warn(`Failed to sync dev extension from ${dir}`, err)
+			}
+		}
+		return loaded
 	}
 
 	async function installFromTarballUrl(
@@ -214,6 +270,7 @@ function createExtensionsStore(): Writable<ExtPackageJsonExtra[]> & {
 		getExtensionsFromStore,
 		findStoreExtensionByIdentifier,
 		registerNewExtensionByPath,
+		syncDevExtensionsFromPath,
 		installTarball,
 		installDevExtensionDir,
 		installFromTarballUrl,

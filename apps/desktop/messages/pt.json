@@ -48,7 +48,7 @@
 	"settings_about_check_for_updates": "Verificar Atualizações",
 
 	"settings_set_dev_ext_title": "Definir Caminho da Extensão de Desenvolvedor",
-	"settings_set_dev_ext_description": "Aqui é onde suas extensões serão instaladas.",
+	"settings_set_dev_ext_description": "Choose a parent directory for dev extensions. Kunkun will automatically sync extension subfolders that contain package.json.",
 	"settings_set_dev_ext_enter_path": "Digite o Caminho",
 
 	"settings_extensions_title": "Suas Extensões",
@@ -59,7 +59,7 @@
 	"settings_extensions_table_col_uninstall": "Desinstalar",
 
 	"settings_add_dev_ext_title": "Adicionar Extensão de Desenvolvedor",
-	"settings_add_dev_ext_description": "Existem 4 opções para instalar uma extensão em modo desenvolvedor. Você pode carregá-la de um arquivo tarball local, pasta local, URL remota de tarball ou nome de pacote npm.",
+	"settings_add_dev_ext_description": "In developer mode, you can add an extension from a local folder, tarball file, remote tarball URL, or npm package name. You can also set a parent dev extension path and let Kunkun sync extensions inside it automatically.",
 	"settings_add_dev_ext_install_from_ext_folders": "Instalar de Pastas de Extensão",
 	"settings_add_dev_ext_install_from_ext_files": "Instalar de Arquivo Tarball de Extensão",
 	"settings_add_dev_ext_drag_and_drop": "Arraste e Solte",
@@ -80,5 +80,10 @@
 	"troubleshooters_extension_loading_title": "Solucionador de Problemas do Carregamento de Extensão",
 	"troubleshooters_extension_loading_table_col_identifier": "Identificador",
 	"troubleshooters_extension_loading_table_col_path": "Caminho",
-	"troubleshooters_extension_loading_table_col_error": "Erro"
+	"troubleshooters_extension_loading_table_col_error": "Erro",
+
+	"dev_extension_path_synced": "Synced {count} extensions from the dev extension directory",
+	"dev_extension_path_sync_failed": "Failed to sync dev extension directory",
+	"app_command_open_dev_extension_path": "Open Dev Extension Directory",
+	"app_command_open_dev_extension_path_description": "Open the configured dev extension directory in Finder"
 }

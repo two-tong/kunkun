@@ -14,7 +14,7 @@ import { dev } from "$app/environment"
 import { goto } from "$app/navigation"
 import Fuse from "fuse.js"
 import { toast } from "svelte-sonner"
-import { derived } from "svelte/store"
+import { derived, get } from "svelte/store"
 import * as clipboard from "tauri-plugin-clipboard-api"
 import { open } from "tauri-plugin-shellx-api"
 import { v4 as uuidv4 } from "uuid"
@@ -468,6 +468,25 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 			console.log(await appDataDir())
 			open(await appDataDir())
 		}
+	},
+	{
+		name: m.app_command_open_dev_extension_path(),
+		icon: {
+			type: IconEnum.Iconify,
+			value: "mdi:folder-code-outline"
+		},
+		description: m.app_command_open_dev_extension_path_description(),
+		function: async () => {
+			const devExtensionPath = get(appConfig).devExtensionPath
+			appState.clearSearchTerm()
+			if (!devExtensionPath) {
+				toast.warning(m.dev_extension_set_path_hint())
+				goto(i18n.resolveRoute("/app/settings/set-dev-ext-path"))
+				return
+			}
+			open(devExtensionPath)
+		},
+		keywords: ["dev", "extension", "folder", "plugin", "directory", "开发插件", "目录"]
 	}
 ].map((cmd) => ({ ...cmd, id: uuidv4() }))
 

@@ -88,7 +88,7 @@
 	"settings_about_check_for_updates": "Check for Updates",
 
 	"settings_set_dev_ext_title": "Set Dev Extension Path",
-	"settings_set_dev_ext_description": "This is where your extensions will be installed.",
+	"settings_set_dev_ext_description": "Choose a parent directory for dev extensions. Kunkun will automatically sync extension subfolders that contain package.json.",
 	"settings_set_dev_ext_enter_path": "Enter Path",
 
 	"settings_extensions_title": "Your Extensions",
@@ -103,7 +103,7 @@
 	"settings_extensions_fail_uninstall": "Failed to uninstall extension",
 
 	"settings_add_dev_ext_title": "Add Dev Extension",
-	"settings_add_dev_ext_description": "There are 4 options to install an extension in developer mode. Either load it from your local tarball file, local folder, a tarball remote URL, or npm package name.",
+	"settings_add_dev_ext_description": "In developer mode, you can add an extension from a local folder, tarball file, remote tarball URL, or npm package name. You can also set a parent dev extension path and let Kunkun sync extensions inside it automatically.",
 	"settings_add_dev_ext_install_from_ext_folders": "Install from Extension Folders",
 	"settings_add_dev_ext_install_from_ext_files": "Install from Extension Tarball File",
 	"settings_add_dev_ext_drag_and_drop": "Drag and Drop",
@@ -343,6 +343,8 @@
 	"dev_extension_tarball_url": "Tarball URL",
 	"dev_extension_file_type_unsupported": "Unsupported file type: {path}",
 	"dev_extension_from_path_installed": "Extension from {path} installed successfully",
+	"dev_extension_path_synced": "Synced {count} extensions from the dev extension directory",
+	"dev_extension_path_sync_failed": "Failed to sync dev extension directory",
 
 	"app_command_store": "Store",
 	"app_command_store_description": "Go to Extension Store",
@@ -354,6 +356,8 @@
 	"app_command_add_dev_extension": "Add Dev Extension",
 	"app_command_version": "Kunkun Version",
 	"app_command_set_dev_extension_path": "Set Dev Extension Path",
+	"app_command_open_dev_extension_path": "Open Dev Extension Directory",
+	"app_command_open_dev_extension_path_description": "Open the configured dev extension directory in Finder",
 	"app_command_extension_window_troubleshooter": "Extension Window Troubleshooter",
 	"app_command_help": "Help",
 	"app_command_help_description": "Check optional dependencies and installation guides",

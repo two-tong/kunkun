@@ -48,7 +48,7 @@
 	"settings_about_check_for_updates": "Kiểm tra cập nhật",
 
 	"settings_set_dev_ext_title": "Đặt đường dẫn tiện ích mở rộng đang phát triển",
-	"settings_set_dev_ext_description": "Đây là đường dẫn cài đặt các tiện ích mở rộng của bạn.",
+	"settings_set_dev_ext_description": "Choose a parent directory for dev extensions. Kunkun will automatically sync extension subfolders that contain package.json.",
 	"settings_set_dev_ext_enter_path": "Nhập đường dẫn",
 
 	"settings_extensions_title": "Tiện ích mở rộng của bạn",
@@ -59,7 +59,7 @@
 	"settings_extensions_table_col_uninstall": "Gỡ cài đặt",
 
 	"settings_add_dev_ext_title": "Thêm tiện ích đang phát triển",
-	"settings_add_dev_ext_description": "Có 4 cách để cài đặt một tiện ích mở rộng trong chế độ nhà phát triển. Nạp nó từ file tarball, thư mục từ máy tính, file tarball từ liên kết ngoài, hoặc tên gói npm.",
+	"settings_add_dev_ext_description": "In developer mode, you can add an extension from a local folder, tarball file, remote tarball URL, or npm package name. You can also set a parent dev extension path and let Kunkun sync extensions inside it automatically.",
 	"settings_add_dev_ext_install_from_ext_folders": "Cài Đặt Từ Thư Mục Tiện Ích",
 	"settings_add_dev_ext_install_from_ext_files": "Cài Đặt Từ File Tarball",
 	"settings_add_dev_ext_drag_and_drop": "Kéo và Thả",
@@ -80,5 +80,10 @@
 	"troubleshooters_extension_loading_title": "Khắc Phục Sự Cố Tải Tiện ích Mở Rộng",
 	"troubleshooters_extension_loading_table_col_identifier": "Định danh",
 	"troubleshooters_extension_loading_table_col_path": "Đường dẫn",
-	"troubleshooters_extension_loading_table_col_error": "Lỗi"
+	"troubleshooters_extension_loading_table_col_error": "Lỗi",
+
+	"dev_extension_path_synced": "Synced {count} extensions from the dev extension directory",
+	"dev_extension_path_sync_failed": "Failed to sync dev extension directory",
+	"app_command_open_dev_extension_path": "Open Dev Extension Directory",
+	"app_command_open_dev_extension_path_description": "Open the configured dev extension directory in Finder"
 }
