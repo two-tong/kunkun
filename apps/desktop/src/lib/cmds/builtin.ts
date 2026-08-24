@@ -163,43 +163,17 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		keywords: ["extension", "window", "troubleshooter"]
 	},
 	{
-		name: m.app_command_help_deno(),
+		name: m.app_command_help(),
 		icon: {
 			type: IconEnum.Iconify,
-			value: "simple-icons:deno"
+			value: "material-symbols:help-outline"
 		},
-		description: "",
+		description: m.app_command_help_description(),
 		function: async () => {
 			appState.clearSearchTerm()
-			goto(i18n.resolveRoute("/app/help/deno-install"))
+			goto(i18n.resolveRoute("/app/help"))
 		},
-		keywords: ["help", "deno", "install"]
-	},
-	{
-		name: m.app_command_help_ffmpeg(),
-		icon: {
-			type: IconEnum.Iconify,
-			value: "logos:ffmpeg-icon"
-		},
-		description: "",
-		function: async () => {
-			appState.clearSearchTerm()
-			goto(i18n.resolveRoute("/app/help/ffmpeg-install"))
-		},
-		keywords: ["help", "ffmpeg", "install"]
-	},
-	{
-		name: m.app_command_help_homebrew(),
-		icon: {
-			type: IconEnum.Iconify,
-			value: "devicon:homebrew"
-		},
-		description: "",
-		function: async () => {
-			appState.clearSearchTerm()
-			goto(i18n.resolveRoute("/app/help/brew-install"))
-		},
-		keywords: ["help", "brew", "install", "homebrew"]
+		keywords: ["help", "deno", "ffmpeg", "brew", "homebrew", "install", "dependency"]
 	},
 	{
 		name: m.app_command_onboarding_dev(),
@@ -499,7 +473,7 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 export const fuse = new Fuse<BuiltinCmd>(rawBuiltinCmds, {
 	includeScore: true,
 	threshold: 0.2,
-	keys: ["name"]
+	keys: ["name", "description", "keywords"]
 })
 
 export const builtinCmds = derived([appConfig, appState], ([$appConfig, $appState]) => {
