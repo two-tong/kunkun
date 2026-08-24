@@ -85,7 +85,8 @@ export const rawBuiltinCmds: BuiltinCmd[] = [
 		},
 		description: "",
 		flags: {
-			dev: true
+			dev: true,
+			developer: true
 		},
 		function: async () => {
 			new WebviewWindow(`splashscreen`, {
@@ -476,13 +477,13 @@ export const fuse = new Fuse<BuiltinCmd>(rawBuiltinCmds, {
 	keys: ["name", "description", "keywords"]
 })
 
+function isBuiltinCmdVisible(cmd: BuiltinCmd, developerMode: boolean) {
+	return (!cmd.flags?.developer || developerMode) && (!cmd.flags?.dev || dev)
+}
+
 export const builtinCmds = derived([appConfig, appState], ([$appConfig, $appState]) => {
-	return $appState.searchTerm
-		? fuse
-				.search($appState.searchTerm)
-				.map((result) => result.item)
-				.filter(
-					(cmd) => (!cmd.flags?.developer || $appConfig.developerMode) && (!cmd.flags?.dev || dev)
-				)
+	const cmds = $appState.searchTerm
+		? fuse.search($appState.searchTerm).map((result) => result.item)
 		: rawBuiltinCmds
+	return cmds.filter((cmd) => isBuiltinCmdVisible(cmd, $appConfig.developerMode))
 })
