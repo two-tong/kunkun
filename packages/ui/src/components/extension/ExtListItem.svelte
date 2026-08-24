@@ -28,12 +28,12 @@
 </script>
 
 <Command.Item
-	class={cn("flex items-center justify-between", className)}
+	class={cn("grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 pr-8", className)}
 	{onSelect}
 	value={ext.identifier}
 	keywords={[ext.name]}
 >
-	<span class="flex items-center space-x-2">
+	<span class="flex min-w-0 items-center space-x-2">
 		<span class="!h-6 !w-6">
 			<IconMultiplexer
 				icon={parse(TIcon, ext.icon)}
@@ -41,13 +41,13 @@
 				data-flip-id={`${Constants.CLASSNAMES.EXT_LOGO}-${ext.identifier}`}
 			/>
 		</span>
-		<span class="flex flex-col gap-0">
-			<div class="ext-name font-semibold">{ext.name}</div>
-			<small class="text-muted-foreground font-mono">{ext.short_description}</small>
+		<span class="flex min-w-0 flex-col gap-0">
+			<div class="ext-name truncate font-semibold">{ext.name}</div>
+			<small class="text-muted-foreground truncate font-mono">{ext.short_description}</small>
 		</span>
 	</span>
 
-	<span class="flex items-center space-x-3">
+	<span class="flex shrink-0 items-center justify-end space-x-3">
 		{#if installedVersion}
 			{@const upgradable = ext.version
 				? greaterThan(parseSemver(ext.version), parseSemver(installedVersion))
@@ -83,7 +83,9 @@
 				<Icon icon="ic:round-download" class="inline h-5 w-5" />
 			</Button>
 		{/if}
-		<span class="w-4 text-center font-mono">{humanReadableNumber(ext.downloads)}</span>
+		<span class="min-w-10 text-right font-mono tabular-nums">
+			{humanReadableNumber(ext.downloads)}
+		</span>
 	</span>
 </Command.Item>
 
