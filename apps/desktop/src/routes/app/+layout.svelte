@@ -5,7 +5,6 @@
 	import { appConfig, appState, extensions, quickLinks, winExtMap } from "@/stores"
 	import { appsLoader } from "@/stores/apps"
 	import { initDeeplink } from "@/utils/deeplink"
-	import { updateAppHotkey } from "@/utils/hotkey"
 	import { init as initApp } from "@/utils/init"
 	import { globalKeyDownHandler, globalKeyUpHandler, goBackOrCloseOnEscape } from "@/utils/key"
 	import { listenToWindowBlur } from "@/utils/tauri-events"
@@ -70,9 +69,6 @@
 		})
 		appsLoader.init()
 		if (isInMainWindow()) {
-			if ($appConfig.triggerHotkey) {
-				updateAppHotkey($appConfig.triggerHotkey)
-			}
 			unlisteners.push(
 				await listenToWindowBlur(() => {
 					const win = getCurrentWebviewWindow()

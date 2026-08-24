@@ -81,7 +81,7 @@
 					<Card.Description>{pkgJson.kunkun.shortDescription}</Card.Description>
 				</Card.Header>
 				<Card.Content>
-					<PermissionInspector manifest={pkgJson.kunkun} />
+					<PermissionInspector permissions={pkgJson.kunkun.permissions} />
 				</Card.Content>
 				<Card.Footer class="block">
 					<p class="text-sm">

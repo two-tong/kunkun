@@ -63,19 +63,39 @@ interface AppConfigAPI {
 }
 
 class AppConfigStore extends Store<AppConfigState> implements AppConfigAPI {
+	private startPromise: Promise<void> | null = null
+
 	constructor() {
 		super("app-config", defaultAppConfig, {
 			saveOnChange: true
 		})
 		if (browser) {
-			this.start().catch((err) => {
-				error("Failed to start app config store", err)
-				toast.error(m.config_store_start_failed(), { description: err.message })
+			this.startPromise = this.startStore()
+		}
+	}
+
+	private async startStore() {
+		try {
+			await this.start()
+		} catch (err) {
+			error(`Failed to start app config store: ${err instanceof Error ? err.message : String(err)}`)
+			toast.error(m.config_store_start_failed(), {
+				description: err instanceof Error ? err.message : String(err)
 			})
 		}
 	}
+
+	private async ensureStarted() {
+		if (!browser) {
+			return
+		}
+		this.startPromise ??= this.startStore()
+		await this.startPromise
+	}
+
 	async init() {
 		debug("Initializing app config")
+		await this.ensureStarted()
 		const extensionsInstallDir = await getExtensionsFolder()
 		const config = this.get()
 		applyTheme(config.theme as ThemeConfig)

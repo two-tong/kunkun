@@ -2,7 +2,6 @@
 	import InstallCodeBlock from "@/components/common/install-code-block.svelte"
 	import * as m from "@/paraglide/messages"
 	import Icon from "@iconify/svelte"
-	import { IconEnum } from "@kksh/api/models"
 	import { Button, Tabs } from "@kksh/svelte5"
 	import { TauriLink } from "@kksh/ui"
 	import { platform } from "@tauri-apps/plugin-os"
@@ -54,12 +53,7 @@
 		<span>{m.help_ffmpeg_not_installed()}</span>
 	</div>
 {/if}
-<TauriLink
-	href="/app/help/ffmpeg-install"
-	icon={IconEnum.Iconify}
-	iconValue="logos:ffmpeg-icon"
-	class="flex items-center gap-2"
->
+<TauriLink href="/app/help/ffmpeg-install" class="flex items-center gap-2">
 	<span class="font-mono text-lg font-bold">{m.help_ffmpeg_website()}</span>
 	<Icon icon="logos:ffmpeg-icon" class="h-6 w-6" />
 </TauriLink>

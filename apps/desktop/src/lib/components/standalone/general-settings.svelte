@@ -174,12 +174,19 @@
 
 <style scoped>
 	li {
-		@apply flex items-center justify-between border-b px-3 py-3;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom-width: 1px;
+		padding: 0.75rem;
 	}
+
 	ul li:last-child {
-		@apply border-b-0;
+		border-bottom-width: 0;
 	}
+
 	li > span {
-		@apply text-sm;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
 	}
 </style>
