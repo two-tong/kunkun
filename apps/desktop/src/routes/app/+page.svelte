@@ -4,6 +4,7 @@
 	import { builtinCmds } from "@/cmds/builtin"
 	import { systemCommands, systemCommandsFiltered } from "@/cmds/system"
 	import AppsCmds from "@/components/main/AppsCmds.svelte"
+	import FileCmds from "@/components/main/FileCmds.svelte"
 	import { i18n } from "@/i18n"
 	import * as m from "@/paraglide/messages"
 	import {
@@ -18,6 +19,7 @@
 		storeSearchExtCmds
 	} from "@/stores"
 	import { cmdQueries } from "@/stores/cmdQuery"
+	import { filesFiltered } from "@/stores/files"
 	import { isKeyboardEventFromInputElement } from "@/utils/dom"
 	import Icon from "@iconify/svelte"
 	import { toggleDevTools } from "@kksh/api/commands"
@@ -252,6 +254,9 @@
 		{/if}
 		{#if $appsFiltered.length > 0}
 			<AppsCmds apps={$appsFiltered} heading={m.command_group_heading_apps()} />
+		{/if}
+		{#if $filesFiltered.length > 0}
+			<FileCmds files={$filesFiltered} heading={m.command_group_heading_files()} />
 		{/if}
 
 		{#if $quickLinksFiltered.length > 0}

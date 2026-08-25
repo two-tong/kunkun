@@ -21,6 +21,7 @@
 	"command_group_heading_dev_ext": "Extensões de Desenvolvedor",
 	"command_group_heading_ext": "Extensões",
 	"command_group_heading_quick_links": "Links Rápidos",
+	"command_group_heading_files": "Files and Folders",
 
 	"settings_menu_settings": "Configurações",
 	"settings_menu_general": "Geral",
@@ -82,6 +83,9 @@
 	"troubleshooters_extension_loading_table_col_path": "Caminho",
 	"troubleshooters_extension_loading_table_col_error": "Erro",
 
+	"file_search_kind_file": "File",
+	"file_search_kind_folder": "Folder",
+	"file_search_open_failed": "Failed to open file or folder",
 	"dev_extension_path_synced": "Synced {count} extensions from the dev extension directory",
 	"dev_extension_path_sync_failed": "Failed to sync dev extension directory",
 	"app_command_open_dev_extension_path": "Open Dev Extension Directory",
